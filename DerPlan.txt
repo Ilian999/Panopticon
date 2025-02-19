@@ -1,0 +1,4 @@
+implement RAG based on documentation
+--make it update automatically when a change in the capabilities directory is detected
+
+include in loop and adjust prompts
