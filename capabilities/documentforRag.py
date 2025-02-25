@@ -9,22 +9,19 @@ def document_file(file_path: str):
     """
     try:
         # Load the agent
-        agent_instance = agent.CreateAgent(preset="documenter")
+        agent_instance = agent.CreateAgent(preset="documenterRAG")
 
         # Read the content of the file
         with open(file_path, 'r', encoding='utf-8') as f:
             file_content = f.read()
 
         # Send the file content to the agent for documentation
-        message = f"Document the following code, including classes, functions, dictionaries, and arrays with detailed comments.\n\n{file_content}"
+        message = f"Document the following code, as per your instructions.\n\n{file_content}"
         documented_content = agent_instance.send_message(message=message)
-
-        # Wrap the documented content between BEGIN_$nti and END_$kso
-        wrapped_content = f"# BEGIN_$nti\n{documented_content}\n# END_$kso"
 
         # Write the wrapped content back into the file
         with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(wrapped_content)
+            f.write(documented_content)
 
         print(f"File documented successfully: {file_path}")
 
@@ -78,7 +75,7 @@ def process_directory(path = "capabilities", excluded_files: list = None, exclud
         excluded_extensions = [".txt"]
 
     document_files_in_directory(path, excluded_files, excluded_dirs, excluded_extensions)
-
+"""
 # Example usage
 if __name__ == "__main__":
     # Specify the directory where your Python files are located
@@ -91,3 +88,4 @@ if __name__ == "__main__":
 
     # Process the directory with the exclusions
     process_directory(directory, excluded_files, excluded_dirs, excluded_extensions)
+"""
