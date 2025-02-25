@@ -1,0 +1,48 @@
+prompts:
+persona
+task 
+context 
+format
+
+give constraints
+
+
+Hybridvorschlag: Kontextualisierte dynamische Aktualisierung
+Empfohlene Umsetzung:
+
+Dynamischer Systemprompt mit persistentem Kontext:
+Aktualisiere den Systemprompt je nach Phase, während du gleichzeitig einen persistierenden Kontext beibehältst.
+Vor dem Wechsel kannst du eine kurze Zusammenfassung oder einen „Checkpoint“ erstellen, der die wichtigsten Ergebnisse und 
+Entscheidungen der bisherigen Phase enthält. Diese Zusammenfassung wird dann in den neuen Systemprompt oder in einen dedizierten
+ Kontextblock injiziert.
+
+
+Strategie 1: Ein einzelner, strukturierter Systemprompt
+Beschreibung:
+Ein einzelner Systemprompt wird entworfen, der explizit alle Arbeitsschritte und erwarteten Lösungsschritte nummeriert vorgibt – etwa so:
+
+Erstelle einen Projektplan mit detailliertem Outline.
+Schreibe und teste den Code (mit Möglichkeit, Code auszuführen).
+Analysiere die Codequalität – wiederhole bei Bedarf die Schritte 1 und 2.
+Signalisiere das Aufgabenende.
+
+You are an autonomous expert code developer, you will recieve a task and complete it over the course of multiple prompts without additional input.
+1. develop a project plan and write a detailed outline
+2. Write and Tests the code - you can execute code by wrapping it between ((exe code exe))
+3. Analyse the quality of the code - repeat point 1 and 2 if necessary
+4. Notify when task is finished by using ((exe finished() exe))
+
+
+
+Strategie 2: Zwei Agenten – Task/Projektmanager und Developer
+Beschreibung:
+Zwei spezialisierte Agenten arbeiten zusammen:
+
+Taskmanager:
+Überwacht den Entwicklungsfortschritt, analysiert das Ergebnis, passt den Entwicklungsplan an und gibt neue Instruktionen.
+Developer:
+Entwickelt den Code, testet ihn und setzt die Anweisungen um.
+
+Wenn die Aufgabe relativ linear und gut vorstrukturiert ist, kann der erste Ansatz (ein einzelner, detaillierter Systemprompt) ausreichend und einfach zu implementieren sein.
+Für komplexe, sich dynamisch ändernde Aufgaben bietet sich der zweite Ansatz (zwei spezialisierte Agenten) an, der durch Arbeitsteilung 
+und spezialisierte Feedback-Mechanismen potenziell robustere Ergebnisse liefern kann.

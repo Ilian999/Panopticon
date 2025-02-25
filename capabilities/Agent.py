@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 import openai
 from . import *
 
-# Define personas (which only override the system content)
+"""
+Define personas (which only override the system content)
+""" 
 PERSONAS = {
     "coder": "You are an expert coder, proficient in Python, JavaScript, and many other languages.",
     "assistant": "You are a friendly assistant",
@@ -14,10 +16,26 @@ PERSONAS = {
     Then, implement your solution iteratively across multiple prompts. When outputting Python code, wrap it between the markers ((ex3c)) 
     and ((exend)). The code enclosed within these markers will be executed after your response, and the output will be provided as the 
     next prompt's input. Ensure your responses are well-structured, include concise comments, and follow best coding practices. 
-    Feel free to ask for the user's help or clarification during development if necessary."""
-}
+    Feel free to ask for the user's help or clarification during development if necessary.""",
+    "documenter": """
+                You are a code documentation assistant. Your task is to document the code in the most concise and readable way possible. The result is intended to be read by Ai-agents so always be consistent with and concise with your output.
+                Always document:
+                - Classes with a class-level docstring explaining their purpose.
+                - Functions with docstrings detailing their functionality, arguments, return types, and any exceptions they raise.
+                - Only Dictionaries and Arrays, that are important with a short description of its content. 
+                When documenting:
+                - Always use triple double quotes to wrap docstrings, even when documenting Arrays or Dictionaries.
+                - For Arrays or Dictionaries place the docstring directly above it.
+                - Ensure docstrings are clear, concise, and follow best practices. Be specific about input and output types for functions and methods.
+                - Be clear about the structure and purpose of arrays and dictionaries.
+                
+                The output should contain only the code, wrapped in between (BEGIN_$nti) and (END_$kso) with documentation for each class, function, array, and dictionary.
+            """
+    }
 
-# Define preset dictionaries for parameter sets
+""" 
+Define parameter sets for ai models
+"""
 PRESETS = {
     "coder": {
         "system_content":  PERSONAS["coder"],
@@ -38,8 +56,14 @@ PRESETS = {
         "system_content": PERSONAS["exe_Coder"],
         "temperature": 0.45,
         "max_tokens": 5000
+    },
+    "documenter" : {
+        "documenting_code": PERSONAS["documenter"],
+        "temperature": 0.4,
+        "max_tokens": 10000
     }
 }
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -99,11 +123,14 @@ class Agent:
 
         The chat will be saved with the name of the chat session, and the file will be in JSON format.
         """
+        # Only save if there is a chat_name
         if self.chat_name:
             chat_path = os.path.join(chatstoragefolder, f"{self.chat_name}.json")
             with open(chat_path, "w") as file:
                 json.dump(self.messages, file)
             print(f"Chat saved as '{chat_path}'")
+        else:
+            print("No chat_name provided. Chat will not be saved.")
 
     def load_chat(self, chat_name):
         """
@@ -209,9 +236,6 @@ class CreateAgent:
             else:
                 raise ValueError("Persona not found")
 
-        if not chat_name:
-            raise ValueError("No Chatname provided")
-        
         self.agent = Agent(
             model=model,
             api_key=api_key,
@@ -220,28 +244,16 @@ class CreateAgent:
             temperature=temperature,
             max_tokens=max_tokens
         )
-    
+
     def send_message(self, message: str) -> str:
-        """
-        Sends a message to the Agent instance.
-
-        Args:
-            message (str): The user message to send to the Agent.
-
-        Returns:
-            str: The model's response.
-        """
         return self.agent.send_message(message)
-    
+
     def save_chat(self):
-        """Saves the current chat of the Agent."""
         self.agent.save_chat()
-    
+
     def load_chat(self, chat_name):
-        """Loads a saved chat into the Agent."""
         self.agent.load_chat(chat_name)
     
     @staticmethod
-    def delete_chat(chat_name):
-        """Deletes a saved chat from the Agent."""
-        Agent.delete_chat(chat_name)
+    def delete_chat(self, chat_name):
+        self.agent.delete_chat(chat_name)

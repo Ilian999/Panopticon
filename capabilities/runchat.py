@@ -148,7 +148,7 @@ def simple_chat(preset_agent=None):
     global current_chat
     if preset_agent:
         current_chat = preset_agent  # Use the passed agent
-        print(f"Chat session started with preset: {current_chat.agent.chat_name}")
+        print(f"Chat session started with preset: {current_chat.agent.persona}")
     else:
         current_chat = selectchat()  # Select chat (new or existing)
     

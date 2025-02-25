@@ -43,7 +43,7 @@ def append_code(filename, content):
 
 def create_file_with_format(filename, file_format):
     """
-    Creates a new file with the specified format in the 'capabilities' subfolder.
+    Creates or saves a new file with the specified format in the 'capabilities' subfolder.
 
     :param filename: The name of the file (without extension) to create.
     :param file_format: The format of the file (e.g., .txt, .py).
@@ -62,7 +62,7 @@ def create_file_with_format(filename, file_format):
 
 def call_function(script_name, function_name):
     """
-    Dynamically imports the specified script and calls the specified function.
+    Dynamically imports the specified script and call the specified function.
     
     :param script_name: The name of the script to import (without .py extension)
     :param function_name: The name of the function to call
