@@ -1,4 +1,5 @@
 import os
+from capabilities import DOC_BEGIN_MARKER, DOC_END_MARKER
 import capabilities.Agent as agent
 from concurrent.futures import ThreadPoolExecutor
 import re
@@ -42,7 +43,7 @@ def document_file(file_path: str):
         message = f"Document the following code, as per your instructions.\n\n{file_content}"
         documented_content = agent_instance.send_message(message=message)
         # Extract the actual code between the markers (BEGIN_$nti) and (END_$kso)
-        match = re.search(r'\(BEGIN_\$nti\)(.*?)\(END_\$kso\)', documented_content, re.DOTALL)
+        match = re.search(rf'\{DOC_BEGIN_MARKER}(.*?)\{DOC_END_MARKER}', documented_content, re.DOTALL)
         if match:
             extracted_code = match.group(1).strip()
         else:
