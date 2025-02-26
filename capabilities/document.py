@@ -31,19 +31,11 @@ def document_file(file_path: str):
         # Send the file content to the agent for documentation
         message = f"Document the following code, as per your instructions.\n\n{file_content}"
         documented_content = agent_instance.send_message(message=message)
-        # Extract the actual code between the markers (BEGIN_$nti) and try:
-        # Load the agent
-        agent_instance = agent.CreateAgent(preset="documenterRAG")
+        escaped_begin = re.escape(DOC_BEGIN_MARKER)
+        escaped_end = re.escape(DOC_END_MARKER)
 
-        # Read the content of the file
-        with open(file_path, 'r', encoding='utf-8') as f:
-            file_content = f.read()
-
-        # Send the file content to the agent for documentation
-        message = f"Document the following code, as per your instructions.\n\n{file_content}"
-        documented_content = agent_instance.send_message(message=message)
-        # Extract the actual code between the markers (BEGIN_$nti) and (END_$kso)
-        match = re.search(rf'\{DOC_BEGIN_MARKER}(.*?)\{DOC_END_MARKER}', documented_content, re.DOTALL)
+        # Extract the actual code between the markers
+        match = re.search(rf'{escaped_begin}(.*?){escaped_end}', documented_content, re.DOTALL)
         if match:
             extracted_code = match.group(1).strip()
         else:
@@ -64,10 +56,15 @@ def document_files_in_directory(directory, excluded_files: list, excluded_dirs: 
     Each file is documented by a separate agent.
 
     Parameters:
-    - directory: The path to the directory to process.
-    - excluded_files: List of specific files to exclude from processing.
-    - excluded_dirs: List of subdirectories to exclude from processing.
-    - excluded_extensions: List of file extensions to exclude from processing.
+    - directory (str): The path to the directory to process.
+    - excluded_files (list): List of specific files to exclude from processing.
+    - excluded_dirs (list): List of subdirectories to exclude from processing.
+    - excluded_extensions (list): List of file extensions to exclude from processing.
+
+    Returns:
+    None
+
+    searchterms_$_: ["directory processing", "parallel execution", "file exclusion"]
     """
     # List to hold files to be documented
     files_to_document = []
@@ -92,10 +89,17 @@ def document_files_in_directory(directory, excluded_files: list, excluded_dirs: 
 def process_directory(path = "capabilities", excluded_files: list = None, excluded_dirs: list = None, excluded_extensions: list = None):
     """
     Main function to process a directory with exclusion lists for files and extensions.
-    - path: The path to the directory containing Python files.
-    - excluded_files: List of specific filenames to exclude from processing.
-    - excluded_dirs: List of subdirectories to exclude from processing.
-    - excluded_extensions: List of file extensions to exclude from processing.
+
+    Parameters:
+    - path (str): The path to the directory containing Python files.
+    - excluded_files (list): List of specific filenames to exclude from processing.
+    - excluded_dirs (list): List of subdirectories to exclude from processing.
+    - excluded_extensions (list): List of file extensions to exclude from processing.
+
+    Returns:
+    None
+
+    searchterms_$_: ["directory processing", "exclusions", "file documentation"]
     """
     if excluded_files is None:
         excluded_files = []
@@ -105,7 +109,7 @@ def process_directory(path = "capabilities", excluded_files: list = None, exclud
         excluded_extensions = [".txt"]
 
     document_files_in_directory(path, excluded_files, excluded_dirs, excluded_extensions)
-"""
+
 # Example usage
 if __name__ == "__main__":
     # Specify the directory where your Python files are located
@@ -118,4 +122,3 @@ if __name__ == "__main__":
 
     # Process the directory with the exclusions
     process_directory(directory, excluded_files, excluded_dirs, excluded_extensions)
-"""
