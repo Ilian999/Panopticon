@@ -6,10 +6,24 @@ import contextlib
 from . import *
 from capabilities.Agent import CreateAgent
 from capabilities.interaction import *
-#from capabilities.interaction import save_script, append_code, create_file_with_format, call_function
 
 # Function to handle termination signals
 def handle_exit_signal(signum, frame):
+    """
+    Handles termination signals to save the current chat and exit the program gracefully.
+
+    Parameters:
+    signum (int): The signal number.
+    frame (signal frame): The current stack frame.
+
+    Returns:
+    None
+
+    Raises:
+    Exception: If an error occurs during chat saving.
+
+    searchterms_1 = ["termination", "signal", "exit", "chat", "save"]
+    """
     global current_chat
     try:
         if current_chat:
@@ -25,8 +39,21 @@ signal.signal(signal.SIGINT, handle_exit_signal)  # Ctrl+C
 signal.signal(signal.SIGTERM, handle_exit_signal)  # Process termination
 
 # Function to select a chat (new, load, delete, or exit)
-# Function to select a chat (new, load, delete, or exit)
 def selectchat():
+    """
+    Prompts the user to select a chat option: create a new chat, load an existing chat, delete a chat, or exit.
+
+    Parameters:
+    None
+
+    Returns:
+    current_chat: The selected or created chat session.
+
+    Raises:
+    KeyboardInterrupt: If the user interrupts the selection process.
+
+    searchterms_2 = ["chat", "selection", "new", "load", "delete"]
+    """
     global current_chat
     chat_sessions = {}
 
@@ -90,6 +117,20 @@ def selectchat():
 
 # Function for the chatting loop after a chat is selected/created
 def simpleloop(current_chat):
+    """
+    Initiates a loop for chatting with the assistant, handling user input and assistant replies.
+
+    Parameters:
+    current_chat: The current chat session object.
+
+    Returns:
+    None
+
+    Raises:
+    KeyboardInterrupt: If the user interrupts the chat session.
+
+    searchterms_3 = ["chat", "loop", "user input", "assistant reply", "session"]
+    """
     while True:
         try:
             user_input = input(f"{current_chat.agent.chat_name} - User: ")
@@ -104,6 +145,20 @@ def simpleloop(current_chat):
 
 
 def coding_loop(current_chat):
+    """
+    Initiates a loop for coding interactions with the assistant, allowing for code execution and feedback.
+
+    Parameters:
+    current_chat: The current chat session object.
+
+    Returns:
+    None
+
+    Raises:
+    KeyboardInterrupt: If the user interrupts the coding session.
+
+    searchterms_4 = ["coding", "loop", "execution", "user input", "assistant reply"]
+    """
     while True:
         try:
             user_input = input(f"{current_chat.agent.chat_name} - User: ")
@@ -142,9 +197,19 @@ def coding_loop(current_chat):
             handle_exit_signal(None, None)
 
 
-
 # Main simple_chat function
 def simple_chat(preset_agent=None):
+    """
+    Starts a simple chat session, either with a preset agent or by selecting a new/existing chat.
+
+    Parameters:
+    preset_agent: An optional agent to start the chat session with.
+
+    Returns:
+    None
+
+    searchterms_5 = ["simple", "chat", "session", "preset", "select"]
+    """
     global current_chat
     if preset_agent:
         current_chat = preset_agent  # Use the passed agent
@@ -157,7 +222,15 @@ def simple_chat(preset_agent=None):
 
 def exe_chat(preset_agent=None):
     """
-    Make sure to provide or load an execoder
+    Starts a coding chat session, either with a preset agent or by selecting a new/existing chat.
+
+    Parameters:
+    preset_agent: An optional agent to start the chat session with.
+
+    Returns:
+    None
+
+    searchterms_6 = ["coding", "chat", "session", "preset", "select"]
     """
     global current_chat
     if preset_agent:

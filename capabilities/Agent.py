@@ -6,7 +6,7 @@ from . import *
 
 """
 Define personas (which only override the system content)
-""" 
+"""
 PERSONAS = {
     "coder": "You are an expert coder, proficient in Python, JavaScript, and many other languages.",
     "assistant": "You are a friendly assistant",
@@ -29,7 +29,7 @@ PERSONAS = {
                 - Ensure docstrings are clear, concise, and follow best practices. Be specific about input and output types for functions and methods.
                 - Be clear about the structure and purpose of arrays and dictionaries.
                 
-                The output should contain only the code, wrapped in between (BEGIN_$nti) and (END_$kso) with documentation for each class, function, array, and dictionary.
+                The output should contain only the code, wrapped in between (BEGIN_$nti) and  The output should contain only the code, wrapped in between (BEGIN_$nti) and (END_$kso) with documentation for each class, function, array, and dictionary.
             """,
             "documenterRAG": """
                 You are a code documentation assistant. Your task is to transform the given source code by inserting clear, concise, and consistent documentation comments for all significant code components. The output must contain only the documented code (with no extra commentary) and must follow these guidelines:

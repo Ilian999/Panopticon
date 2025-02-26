@@ -31,7 +31,18 @@ if __name__ == "__main__":
 LOG_FILE = "ragcreationerror.log"
 
 class RAGFramework:
+    """
+    A framework for building and managing retrieval-augmented generation (RAG) systems.
+    
+    This class is responsible for loading Python files, parsing their components, 
+    building BM25 and FAISS indices for efficient retrieval, and providing 
+    methods for hybrid search queries.
+    
+    searchterms_1 = ["RAG", "retrieval", "BM25", "FAISS", "indexing"]
+    """
+    
     def __init__(self):
+        """Initialize the RAG framework with necessary data structures."""
         self.data = {}            # Maps file -> parsed components (functions, classes, arrays, dictionaries)
         self.entries = []         # List of search entries (each a dict with fields and a text representation)
         self.corpus = []          # List of text strings for each entry (used for indexing)
@@ -48,7 +59,16 @@ class RAGFramework:
         """
         Parse a file using the ast module (for functions and classes)
         and regex (for arrays and dictionaries).
+        
         Returns a dict with keys: "functions", "classes", "arrays", "dictionaries".
+        
+        Parameters:
+            filepath (str): The path to the Python file to be parsed.
+        
+        Returns:
+            dict: A dictionary containing parsed components of the file.
+        
+        searchterms_2 = ["parse", "file", "AST", "regex", "components"]
         """
         parsed = {
             "functions": [],      # List of dicts: { "head": ..., "doc": ... }
@@ -121,7 +141,14 @@ class RAGFramework:
         return parsed
 
     def load_data(self, directory):
-        """Load and parse all Python files in the given directory."""
+        """
+        Load and parse all Python files in the given directory.
+        
+        Parameters:
+            directory (str): The path to the directory containing Python files.
+        
+        searchterms_3 = ["load", "data", "directory", "Python", "files"]
+        """
         for file in os.listdir(directory):
             if file.endswith('.py'):
                 filepath = os.path.join(directory, file)
@@ -132,9 +159,12 @@ class RAGFramework:
     def build_entries(self):
         """
         Build a list of entries from the parsed data.
+        
         Each entry is a dictionary with keys:
           - file, type, head, doc, and optionally parent information for methods.
         Also build a corpus list (text for each entry) used for indexing.
+        
+        searchterms_4 = ["build", "entries", "parsed", "data", "corpus"]
         """
         self.entries = []
         self.corpus = []
@@ -208,7 +238,11 @@ class RAGFramework:
                 # print(f"Generated dictionary entry: {entry}")  # Debug: dictionary entry generated
 
     def build_bm25_index(self):
-        """Build BM25 model over the corpus (each entry's text)."""
+        """
+        Build BM25 model over the corpus (each entry's text).
+        
+        searchterms_5 = ["build", "BM25", "model", "corpus", "index"]
+        """
         if self.corpus:
             tokenized_corpus = [doc.split() for doc in self.corpus]
             self.bm25 = BM25Okapi(tokenized_corpus)
@@ -216,7 +250,11 @@ class RAGFramework:
             print("Warning: Corpus is empty. BM25 model not built.")
 
     def build_faiss_index(self):
-        """Build FAISS index over the corpus using TF-IDF vectors."""
+        """
+        Build FAISS index over the corpus using TF-IDF vectors.
+        
+        searchterms_6 = ["build", "FAISS", "index", "TF-IDF", "vectors"]
+        """
         if self.corpus:
             self.vectorizer = TfidfVectorizer()
             vectors = self.vectorizer.fit_transform(self.corpus).toarray()
@@ -228,7 +266,14 @@ class RAGFramework:
             print("Warning: Corpus is empty. FAISS index not built.")
 
     def save_bm25(self, filepath):
-        """Save the BM25 model and the entries mapping."""
+        """
+        Save the BM25 model and the entries mapping.
+        
+        Parameters:
+            filepath (str): The path to the file where the BM25 model will be saved.
+        
+        searchterms_7 = ["save", "BM25", "model", "filepath", "entries"]
+        """
         if self.bm25 is not None:
             with open(filepath, 'wb') as f:
                 pickle.dump({
@@ -240,7 +285,14 @@ class RAGFramework:
             print("BM25 model is not built.")
 
     def save_faiss(self, filepath):
-        """Save the FAISS index, vectorizer, and the entries mapping."""
+        """
+        Save the FAISS index, vectorizer, and the entries mapping.
+        
+        Parameters:
+            filepath (str): The path to the file where the FAISS index will be saved.
+        
+        searchterms_8 = ["save", "FAISS", "index", "vectorizer", "filepath"]
+        """
         if self.faiss_index is not None and self.vectorizer is not None:
             data_to_save = {
                 "faiss_index": self.faiss_index,
@@ -260,6 +312,13 @@ class RAGFramework:
           2. Build entries and corpus from parsed components.
           3. Build BM25 and FAISS indices.
           4. Save the models to specified file paths.
+        
+        Parameters:
+            directory (str): The path to the directory containing Python files.
+            bm25_filepath (str): The path to save the BM25 model.
+            faiss_filepath (str): The path to save the FAISS index.
+        
+        searchterms_9 = ["build", "save", "indices", "directory", "filepaths"]
         """
         self.load_data(directory)
         self.build_entries()
@@ -268,11 +327,18 @@ class RAGFramework:
         self.save_bm25(bm25_filepath)
         self.save_faiss(faiss_filepath)
 
-
-
     def retrieve(self, queries, topk=1):
         """
         Hybrid retrieval system for structured (exact) and semantic (natural language) search.
+        
+        Parameters:
+            queries (list): A list of search queries (strings).
+            topk (int): The number of top results to return (default is 1).
+        
+        Returns:
+            list: A list of retrieved entries based on the search queries.
+        
+        searchterms_10 = ["retrieve", "queries", "search", "results", "hybrid"]
         """
         if self.faiss_index is None or self.vectorizer is None:
             print("FAISS index is not built.")
@@ -335,6 +401,3 @@ class RAGFramework:
                     dedup_results[key] = entry
 
         return list(dedup_results.values())
-
-
-
