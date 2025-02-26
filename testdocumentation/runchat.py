@@ -1,6 +1,3 @@
-Here's the documentation for the provided code, detailing its structure, functionality, and purpose:
-
-```python
 import signal
 import sys
 import os
@@ -9,17 +6,26 @@ import contextlib
 from . import *
 from capabilities.Agent import CreateAgent
 from capabilities.interaction import *
-# from capabilities.interaction import save_script, append_code, create_file_with_format, call_function
 
 # Function to handle termination signals
 def handle_exit_signal(signum, frame):
     """
     Handles termination signals (SIGINT and SIGTERM).
-    Saves the current chat session if it exists before exiting the program.
     
+    This function attempts to save the current chat session if it exists
+    before exiting the program.
+
     Parameters:
-    signum (int): The signal number.
-    frame (frame): The current stack frame (unused).
+        signum (int): The signal number.
+        frame (signal frame): The current stack frame.
+
+    Returns:
+        None
+
+    Raises:
+        Exception: If an error occurs during chat saving.
+    
+    searchterms_1 = ["signal", "exit", "chat", "termination", "save"]
     """
     global current_chat
     try:
@@ -38,10 +44,18 @@ signal.signal(signal.SIGTERM, handle_exit_signal)  # Process termination
 # Function to select a chat (new, load, delete, or exit)
 def selectchat():
     """
-    Prompts the user to select a chat option: create a new chat, load an existing chat, delete a chat, or exit.
-    
+    Allows the user to select a chat session to create, load, delete, or exit.
+
+    This function presents a menu to the user and manages the selection
+    process for chat sessions.
+
     Returns:
-    current_chat (Agent): The selected or created chat session.
+        CreateAgent: The current chat session.
+
+    Raises:
+        KeyboardInterrupt: If the user interrupts the selection process.
+    
+    searchterms_2 = ["chat", "selection", "create", "load", "delete"]
     """
     global current_chat
     chat_sessions = {}
@@ -103,14 +117,24 @@ def selectchat():
         except KeyboardInterrupt:
             handle_exit_signal(None, None)  # Handle Ctrl+C during chat selection
 
-
 # Function for the chatting loop after a chat is selected/created
 def simpleloop(current_chat):
     """
-    Initiates a simple chat loop where the user can interact with the chat agent.
-    
+    Manages the chat loop for user interaction after a chat session is selected.
+
+    This function continues to prompt the user for input and responds
+    with the assistant's replies until the user decides to exit.
+
     Parameters:
-    current_chat (Agent): The current chat session.
+        current_chat (CreateAgent): The current chat session.
+
+    Returns:
+        None
+
+    Raises:
+        KeyboardInterrupt: If the user interrupts the chat session.
+    
+    searchterms_3 = ["chat", "loop", "user interaction", "assistant", "exit"]
     """
     while True:
         try:
@@ -124,13 +148,23 @@ def simpleloop(current_chat):
         except KeyboardInterrupt:
             handle_exit_signal(None, None)  # Handle Ctrl+C
 
-
 def coding_loop(current_chat):
     """
-    Initiates a coding chat loop where the user can interact with the chat agent and execute code blocks.
-    
+    Manages the coding loop for user interaction that involves code execution.
+
+    This function continues to prompt the user for input and executes code
+    blocks found in the assistant's replies until the user decides to exit.
+
     Parameters:
-    current_chat (Agent): The current chat session.
+        current_chat (CreateAgent): The current chat session.
+
+    Returns:
+        None
+
+    Raises:
+        KeyboardInterrupt: If the user interrupts the coding session.
+    
+    searchterms_4 = ["coding", "loop", "execution", "user interaction", "assistant"]
     """
     while True:
         try:
@@ -169,14 +203,21 @@ def coding_loop(current_chat):
         except KeyboardInterrupt:
             handle_exit_signal(None, None)
 
-
 # Main simple_chat function
 def simple_chat(preset_agent=None):
     """
-    Starts a simple chat session with an optional preset agent.
-    
+    Initiates a simple chat session with the option to use a preset agent.
+
+    This function sets up the current chat session either by using a provided
+    agent or by selecting a new or existing chat session.
+
     Parameters:
-    preset_agent (Agent, optional): An existing agent to use for the chat session.
+        preset_agent (CreateAgent, optional): An optional preset chat agent.
+
+    Returns:
+        None
+    
+    searchterms_5 = ["chat", "session", "preset", "initiate", "user interaction"]
     """
     global current_chat
     if preset_agent:
@@ -187,13 +228,20 @@ def simple_chat(preset_agent=None):
     
     simpleloop(current_chat)  # Start the chat loop
 
-
 def exe_chat(preset_agent=None):
     """
-    Starts a coding chat session with an optional preset agent.
-    
+    Initiates a chat session focused on executing code with the option to use a preset agent.
+
+    This function sets up the current chat session either by using a provided
+    agent or by selecting a new or existing chat session.
+
     Parameters:
-    preset_agent (Agent, optional): An existing agent to use for the coding chat session.
+        preset_agent (CreateAgent, optional): An optional preset chat agent.
+
+    Returns:
+        None
+    
+    searchterms_6 = ["chat", "execution", "code", "preset", "initiate"]
     """
     global current_chat
     if preset_agent:
@@ -206,7 +254,15 @@ def exe_chat(preset_agent=None):
 
 def main():
     """
-    Main function to execute the script. It creates a test file using a specified format.
+    Main entry point of the application.
+
+    This function initializes a file creation process and demonstrates
+    the use of the create_file_with_format function.
+
+    Returns:
+        None
+    
+    searchterms_7 = ["main", "entry point", "file", "creation", "demonstration"]
     """
     filename = "test_file"
     file_format = ".txt"
@@ -214,13 +270,3 @@ def main():
     # Call the create_file_with_format function directly
     result = create_file_with_format(filename, file_format)
     print(result)
-```
-
-### Summary of the Code:
-- **Signal Handling**: The code sets up signal handlers to gracefully save the current chat session when the program is interrupted or terminated.
-- **Chat Selection**: The `selectchat` function allows users to create, load, delete, or exit chat sessions.
-- **Chat Loops**: The `simpleloop` and `coding_loop` functions handle user interactions in a chat session, with the latter specifically designed to execute code blocks returned by the assistant.
-- **Main Functions**: The `simple_chat` and `exe_chat` functions initiate chat sessions, optionally using a preset agent.
-- **File Creation**: The `main` function demonstrates creating a file with a specified format, although the actual file creation logic is commented out and depends on external functions. 
-
-This documentation provides a clear understanding of the code's structure and functionality for future reference or modifications.

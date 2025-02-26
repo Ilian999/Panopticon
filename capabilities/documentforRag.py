@@ -1,6 +1,7 @@
 import os
 import capabilities.Agent as agent
 from concurrent.futures import ThreadPoolExecutor
+import re
 
 def document_file(file_path: str):
     """
@@ -18,10 +19,16 @@ def document_file(file_path: str):
         # Send the file content to the agent for documentation
         message = f"Document the following code, as per your instructions.\n\n{file_content}"
         documented_content = agent_instance.send_message(message=message)
+        # Extract the actual code between the markers (BEGIN_$nti) and (END_$kso)
+        match = re.search(r'\(BEGIN_\$nti\)(.*?)\(END_\$kso\)', documented_content, re.DOTALL)
+        if match:
+            extracted_code = match.group(1).strip()
+        else:
+            extracted_code = documented_content.strip()
 
-        # Write the wrapped content back into the file
+        # Write the extracted code back into the file
         with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(documented_content)
+            f.write(extracted_code)
 
         print(f"File documented successfully: {file_path}")
 

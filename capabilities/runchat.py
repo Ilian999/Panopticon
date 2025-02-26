@@ -167,11 +167,11 @@ def exe_chat(preset_agent=None):
         current_chat = selectchat()  # Select chat (new or existing)
     
     coding_loop(current_chat)  # Start the chat loop
-
+'''
 def main():
     filename = "test_file"
     file_format = ".txt"
 
     # Call the create_file_with_format function directly
     result = create_file_with_format(filename, file_format)
-    print(result)
+    print(result)'''

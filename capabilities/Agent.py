@@ -37,18 +37,18 @@ PERSONAS = {
                 1. **Classes:**
                 - Immediately after the class declaration, insert a class-level docstring enclosed in triple double quotes.
                 - The docstring must clearly explain the classs purpose and key responsibilities.
-                - Append within the same docstring an array named searchterms_$_ containing 3–5 distinctive keywords that succinctly describe the class’s functionality and key parameters.
+                - Append within the same docstring an array named searchterms_$_ containing 3-5 distinctive keywords that succinctly describe the classs functionality and key parameters.
 
                 2. **Functions/Methods:**
                 - Immediately after the function or method definition, add a docstring (using triple double quotes) that includes:
                     - A brief summary of the function/methods purpose.
                     - A description of each parameter (including types), return values, and any raised exceptions.
-                - Append within the same docstring an array named searchterms_$_ containing 3–5 distinctive keywords that capture the function/method’s behavior.
+                - Append within the same docstring an array named searchterms_$_ containing 3-5 distinctive keywords that capture the function/methods behavior.
 
                 3. **Dictionaries and Arrays:**
                 - For any important dictionary or array, insert a docstring directly above its definition, enclosed in triple double quotes.
                 - The docstring should provide a brief description of the structures purpose and content.
-                - Append within the same docstring an array named searchterms_$_ with 3–5 unique keywords that describe the nature and role of the data structure.
+                - Append within the same docstring an array named searchterms_$_ with 3-5 unique keywords that describe the nature and role of the data structure.
 
                 **Additional Requirements:**
                 - Use triple double quotes exclusively for all docstrings.
@@ -89,14 +89,14 @@ PRESETS = {
         "max_tokens": 5000
     },
     "documenter" : {
-        "documenting_code": PERSONAS["documenter"],
+        "system_content": PERSONAS["documenter"],
         "temperature": 0.4,
-        "max_tokens": 10000
+        "max_tokens": 5000
     },
     "documenterRAG" : {
-        "documenting_code": PERSONAS["documenterRAG"],
+        "system_content": PERSONAS["documenterRAG"],
         "temperature": 0.4,
-        "max_tokens": 10000
+        "max_tokens": 5000
     }
 }
 
@@ -239,7 +239,7 @@ class CreateAgent:
     
     def __init__(self, model="gpt-4o-mini", api_key=None, chat_name=None,
                  system_content=None, temperature=None, max_tokens=None,
-                 preset="default", persona=None):
+                 preset=None, persona=None):
         """
         Initializes a CreateAgent instance with the provided parameters.
 
@@ -262,6 +262,7 @@ class CreateAgent:
             max_tokens = max_tokens or PRESETS[preset].get("max_tokens")
         else:
             default_system_content = PERSONAS["assistant"]
+            raise ValueError("Preset not found")
 
         if system_content is None:
             system_content = default_system_content
