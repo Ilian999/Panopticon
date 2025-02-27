@@ -23,31 +23,33 @@ def parse_file(filepath):
     """
     Parse a file using the ast module (for functions and classes)
     and regex (for arrays and dictionaries).
-    
+
     Returns a dict with keys: "functions", "classes", "arrays", "dictionaries".
-    
+
     Parameters:
         filepath (str): The path to the Python file to be parsed.
-    
+
     Returns:
         dict: A dictionary containing parsed components of the file.
+
+    searchterms_2 = ["parse", "file", "AST", "regex", "components"]
     """
     parsed = {
         "functions": [],      # List of dicts: { "head": ..., "doc": ... }
         "classes": [],        # List of dicts: { "head": ..., "doc": ..., "methods": [ { "head":..., "doc":... } ] }
-        "arrays": [],         # List of dicts: { "name":..., "head":..., "doc":... }
-        "dictionaries": []    # Similar structure for dictionaries.
+        "arrays": [],         # List of dicts: { "name":..., "head":..., "doc": ... }
+        "dictionaries": []    # List of dicts: { "name":..., "head":..., "doc":..., "body": ... }
     }
 
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             source = f.read()
-        
+
         # Use ast to parse functions and classes
         try:
             tree = ast.parse(source)
         except Exception as e:
-            print(f"AST parse error in {filepath}: {e}")
+            self.log_error(f"AST parse error in {filepath}: {e}")
             tree = None
 
         # Get source lines for retrieving the signature line
@@ -60,7 +62,7 @@ def parse_file(filepath):
                     doc = ast.get_docstring(node)
                     parsed["functions"].append({"head": head, "doc": doc or ""})
                     # Log the function code for embeddings
-                    # log_embedding_input(head + " " + (doc or ""))
+                    log_embedding_input(head + " " + (doc or ""))
 
                 elif isinstance(node, ast.ClassDef):
                     # Class definition
@@ -69,15 +71,20 @@ def parse_file(filepath):
                     class_entry = {"head": class_head, "doc": class_doc or "", "methods": []}
                     for item in node.body:
                         if isinstance(item, ast.FunctionDef):
+                            # Only include methods directly under the class (skip nested functions)
                             method_head = lines[item.lineno - 1].strip() if item.lineno - 1 < len(lines) else f"def {item.name}(...)"
                             method_doc = ast.get_docstring(item)
                             class_entry["methods"].append({"head": method_head, "doc": method_doc or ""})
                             # Log the method code for embeddings
-                            # log_embedding_input(method_head + " " + (method_doc or ""))
+                            log_embedding_input(method_head + " " + (method_doc or ""))
                     parsed["classes"].append(class_entry)
 
-        # Use regex for arrays and dictionaries
-        array_pattern = re.compile(r'(?:(?P<doc>""".*?""")\s*)?(?P<var>\w+)\s*=\s*\[.*?\]', re.DOTALL | re.MULTILINE)
+        # Use regex for arrays.
+        # Require an optional docstring ending with a newline before the assignment.
+        array_pattern = re.compile(
+            r'(?:(?P<doc>""".*?""")\s*\n)?(?P<var>\w+)\s*=\s*\[.*?\]',
+            re.DOTALL | re.MULTILINE
+        )
         for match in array_pattern.finditer(source):
             var_name = match.group("var")
             doc = match.group("doc")
@@ -88,25 +95,38 @@ def parse_file(filepath):
                 doc = doc.strip('"""').strip()
             parsed["arrays"].append({"name": var_name, "head": head_line, "doc": doc})
             # Log the array code for embeddings
-            # log_embedding_input(head_line + " " + doc)
+            log_embedding_input(head_line + " " + doc)
 
-        dict_pattern = re.compile(r'(?:(?P<doc>""".*?""")\s*)?(?P<var>\w+)\s*=\s*\{.*?\}', re.DOTALL | re.MULTILINE)
+        # Use regex for dictionaries.
+        # Only match dictionary variable names that are all caps.
+        # Also capture the entire dictionary body.
+        dict_pattern = re.compile(
+            r'(?:(?P<doc>""".*?""")\s*\n)?(?P<var>[A-Z_]+)\s*=\s*(?P<body>\{.*?\})',
+            re.DOTALL | re.MULTILINE
+        )
         for match in dict_pattern.finditer(source):
             var_name = match.group("var")
             doc = match.group("doc")
             head_line = match.group(0).splitlines()[0].strip()
+            body = match.group("body").strip()
             if not doc:
                 doc = ""
             else:
                 doc = doc.strip('"""').strip()
-            parsed["dictionaries"].append({"name": var_name, "head": head_line, "doc": doc})
+            parsed["dictionaries"].append({
+                "name": var_name,
+                "head": head_line,
+                "doc": doc,
+                "body": body
+            })
             # Log the dictionary code for embeddings
-            # log_embedding_input(head_line + " " + doc)
+            log_embedding_input(head_line + " " + doc + " " + body)
 
     except Exception as e:
-        print(f"Error processing file {filepath}: {e}")
-    
+        self.log_error(f"Error processing file {filepath}: {e}")
+
     return parsed
+
 
 def get_embedding(text: str, model="text-embedding-ada-002"):
     """

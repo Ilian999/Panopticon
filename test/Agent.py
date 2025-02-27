@@ -38,22 +38,18 @@ PERSONAS = {
                 1. **Classes:**
                 - Immediately after the class declaration, insert a class-level docstring enclosed in triple double quotes.
                 - The docstring must clearly explain the classs purpose and key responsibilities.
-                - Append within the same docstring an array named searchterms_$_ containing 3-5 distinctive keywords that succinctly describe the classs functionality and key parameters.
-
+                
                 2. **Functions/Methods:**
                 - Immediately after the function or method definition, add a docstring (using triple double quotes) that includes:
                     - A brief summary of the function/methods purpose.
                     - A description of each parameter (including types), return values, and any raised exceptions.
-                - Append within the same docstring an array named searchterms_$_ containing 3-5 distinctive keywords that capture the function/methods behavior.
-
+                
                 3. **Dictionaries and Arrays:**
                 - For any important dictionary or array, insert a docstring directly above its definition, enclosed in triple double quotes.
                 - The docstring should provide a brief description of the structures purpose and content.
-                - Append within the same docstring an array named searchterms_$_ with 3-5 unique keywords that describe the nature and role of the data structure.
-
+                
                 **Additional Requirements:**
                 - Use triple double quotes exclusively for all docstrings.
-                - Do not include any commentary or explanations outside of the documented code.
                 - The final output must consist solely of the transformed code, wrapped between these markers:
                 {DOC_BEGIN_MARKER}
                 <documented code>
@@ -129,7 +125,6 @@ class Agent:
         send_message(message: str): Sends a message to the GPT model and appends the reply to the conversation history.
         delete_chat(chat_name): Deletes a saved chat file.
 
-    searchterms_$_ = ["chat agent", "OpenAI", "GPT model", "conversation", "messages"]
     """
     
     def __init__(self, system_content, temperature, max_tokens, model="gpt-4o-mini", api_key=None, chat_name=None):
@@ -147,7 +142,6 @@ class Agent:
         Raises:
             ValueError: If no valid API key is provided.
 
-        searchterms_$_ = ["initialization", "parameters", "Agent", "OpenAI API", "chat session"]
         """
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.api_key:
@@ -169,7 +163,6 @@ class Agent:
 
         The chat will be saved with the name of the chat session, and the file will be in JSON format.
 
-        searchterms_$_ = ["save chat", "file", "JSON", "chat storage", "session"]
         """
         # Only save if there is a chat_name
         if self.chat_name:
@@ -189,7 +182,6 @@ class Agent:
 
         If the chat session file does not exist, it will print an error message.
 
-        searchterms_$_ = ["load chat", "file", "error handling", "chat session", "JSON"]
         """
         try:
             chat_path = os.path.join(chatstoragefolder, f"{chat_name}.json")
@@ -209,7 +201,6 @@ class Agent:
         Returns:
             str: The model's response.
 
-        searchterms_$_ = ["send message", "GPT model", "response", "conversation history", "user message"]
         """
         self.messages.append({"role": "user", "content": message})
         response = openai.chat.completions.create(
@@ -232,7 +223,6 @@ class Agent:
 
         If the chat file does not exist, it will print an error message.
 
-        searchterms_$_ = ["delete chat", "file", "error handling", "chat session", "remove"]
         """
         try:
             chat_path = os.path.join(chatstoragefolder, f"{chat_name}.json")
@@ -254,7 +244,7 @@ class CreateAgent:
         load_chat(chat_name): Loads a saved chat into the Agent.
         delete_chat(chat_name): Deletes a saved chat from the Agent.
 
-    searchterms_$_ = ["create agent", "agent instance", "parameters", "GPT model", "interaction"]
+
     """
     
     def __init__(self, model="gpt-4o-mini", api_key=None, chat_name=None,
@@ -276,7 +266,7 @@ class CreateAgent:
         Raises:
             ValueError: If no valid chat name is provided.
 
-        searchterms_$_ = ["initialize", "CreateAgent", "parameters", "agent configuration", "preset"]
+
         """
         if preset and preset in PRESETS:
             default_system_content = PRESETS[preset].get("system_content", PERSONAS["assistant"])
@@ -314,7 +304,7 @@ class CreateAgent:
         Returns:
             str: The response from the Agent instance.
 
-        searchterms_$_ = ["send message", "Agent", "response", "interaction", "user input"]
+
         """
         return self.agent.send_message(message)
 
@@ -322,7 +312,7 @@ class CreateAgent:
         """
         Saves the current chat of the Agent.
 
-        searchterms_$_ = ["save chat", "Agent", "current chat", "file", "session"]
+
         """
         self.agent.save_chat()
 
@@ -333,7 +323,7 @@ class CreateAgent:
         Args:
             chat_name (str): The name of the chat session to load.
 
-        searchterms_$_ = ["load chat", "Agent", "session", "file", "retrieve"]
+
         """
         self.agent.load_chat(chat_name)
     
@@ -345,6 +335,6 @@ class CreateAgent:
         Args:
             chat_name (str): The name of the chat session to delete.
 
-        searchterms_$_ = ["delete chat", "Agent", "session", "file", "remove"]
+
         """
         self.agent.delete_chat(chat_name)
