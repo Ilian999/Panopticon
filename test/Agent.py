@@ -3,7 +3,7 @@ import json
 from dotenv import load_dotenv
 import openai
 from . import *
-from capabilities import DOC_BEGIN_MARKER, DOC_END_MARKER
+from capabilities import DOC_BEGIN_MARKER, DOC_END_MARKER, chatstoragefolder
 
 """
 Define personas (which only override the system content)

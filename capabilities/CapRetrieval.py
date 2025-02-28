@@ -12,6 +12,7 @@ import re
 import os
 import json
 
+LOG_FILE = "ragcreationerror.log"
 def log_embedding_input(code: str, log_file="embedding_inputs.log"):
     """
     Appends the code snippet to a log file for debugging purposes.
@@ -19,6 +20,10 @@ def log_embedding_input(code: str, log_file="embedding_inputs.log"):
     with open(log_file, "a", encoding="utf-8") as file:
         file.write(code + "\n\n")
 
+def log_error(self, message):
+        """Append error messages to the log file."""
+        with open(LOG_FILE, "a", encoding="utf-8") as log_file:
+            log_file.write(message + "\n")
 def parse_file(filepath):
     """
     Parse a file using the ast module (for functions and classes)
@@ -49,7 +54,7 @@ def parse_file(filepath):
         try:
             tree = ast.parse(source)
         except Exception as e:
-            self.log_error(f"AST parse error in {filepath}: {e}")
+            log_error(f"AST parse error in {filepath}: {e}")
             tree = None
 
         # Get source lines for retrieving the signature line
@@ -123,7 +128,7 @@ def parse_file(filepath):
             log_embedding_input(head_line + " " + doc + " " + body)
 
     except Exception as e:
-        self.log_error(f"Error processing file {filepath}: {e}")
+        log_error(f"Error processing file {filepath}: {e}")
 
     return parsed
 
@@ -132,7 +137,7 @@ def get_embedding(text: str, model="text-embedding-ada-002"):
     """
     Generates a text embedding using OpenAI's text-embedding-ada-002.
     """
-    response = openai.embeddings.create(input=[text], model=model)
+    response = openai.embeddings.create(input=[text], model=EMBEDDING_MODEL)
     return response.data[0].embedding
 
 def generate_and_store_embeddings(path="capabilities", excluded_files=None, excluded_dirs=None, excluded_extensions=None):
@@ -188,10 +193,6 @@ def generate_and_store_embeddings(path="capabilities", excluded_files=None, excl
     print(f"Embeddings stored in {EMBEDDING_FILE}")
 
 
-import json
-import numpy as np
-import openai
-
 def load_embeddings():
     """
     Loads stored code embeddings from the JSON file.
@@ -218,8 +219,8 @@ def get_query_embedding(query: str) -> np.ndarray:
     
     Returns a NumPy array representing the embedding.
     """
-    response = openai.Embedding.create(input=[query], model=EMBEDDING_MODEL)
-    return np.array(response["data"][0]["embedding"])
+    response = openai.embeddings.create(input=[query], model=EMBEDDING_MODEL)
+    return response.data[0].embedding
 
 def cosine_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
     """
@@ -260,9 +261,8 @@ def search_code(query: str, top_k: int = 3):
     # Sort by highest similarity and return top_k matches
     results.sort(reverse=True, key=lambda x: x[0])
     top_matches = results[:top_k]
-
-    return [
-        {"path": match[1]["path"], "code": match[1]["code"], "similarity": match[0]}
-        for match in top_matches
+    filtered_matches = [
+        {k: v for k, v in entry.items() if k != "embedding"} 
+        for _, entry in top_matches  # Unpack tuple: ignore the first element
     ]
-
+    return filtered_matches
