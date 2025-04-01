@@ -1,4 +1,15 @@
-implement RAG based on documentation
---make it update automatically when a change in the capabilities directory is detected
+cap retireval -arrays entfernen und andere details fixen paths hinzufügen
 
-include in loop and adjust prompts
+
+doc für alles generieren, 
+
+doc erweitern+dokumentieren und code base überwachen funktion implementieren (großprojekt)
+
+retrieve capabilites erweitern - code zurückgeben
+
+select chat erweiter ? ist das notwendig?
+
+code and query implementieren
+
+
+REWATCH VIDEO IN AI PROJECT PLAYLIST REGARDING TITANS AND EXAMINE IT
