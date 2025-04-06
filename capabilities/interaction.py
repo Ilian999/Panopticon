@@ -28,7 +28,7 @@ def save_script(filename, content):
 
 def append_code(filename, content):
     """
-    Appends the content to the specified file in the 'capabilities' subfolder.
+    Appends the code to the specified file in the 'capabilities' subfolder.
 
     :param filename: The name of the file (with .py extension) to append to. (str)
     :param content: The content to append to the file. (str)

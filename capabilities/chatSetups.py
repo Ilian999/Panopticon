@@ -2,10 +2,11 @@ import signal
 import sys
 import os
 import io
+import contextlib
+import importlib.util
 
 from capabilities.constants import CAPABILITIES
 from . import * 
-import contextlib
 from capabilities.CapRetrieval import search_code
 from capabilities.Agent import CreateAgent
 
@@ -133,6 +134,46 @@ def chat_loop(current_chat, process_response=None):
         except KeyboardInterrupt:
             print("Exiting...")
             sys.exit(0)
+def search_and_import_function(function_name):
+    """
+    Searches for a function in the codebase and imports it if found.
+
+    Parameters:
+    function_name (str): The name of the function to search for.
+
+    Returns:
+    function: The function object if found and imported, None otherwise.
+    """
+    # Example search path, modify as needed
+    search_paths = ['./capabilities']  # Adjust this path to your library's location
+
+    # print(f"Starting search for function '{function_name}'...")
+
+    for path in search_paths:
+        # print(f"Searching in path: {path}")
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.endswith('.py'):
+                    module_name = file[:-3]  # Remove .py extension
+                    file_path = os.path.join(root, file)
+                    # print(f"Found module: {module_name} in {root}")
+                    try:
+                        spec = importlib.util.spec_from_file_location(module_name, file_path)
+                        module = importlib.util.module_from_spec(spec)
+                        spec.loader.exec_module(module)
+                        # print(f"Successfully imported module {module_name}.")
+                        if hasattr(module, function_name):
+                            func = getattr(module, function_name)
+                            # print(f"Function '{function_name}' found in module '{module_name}'.")
+                            globals()[function_name] = func  # Add function to globals
+                            return func
+                        else:
+                            pass
+                            # print(f"Function '{function_name}' not found in module '{module_name}'.")
+                    except Exception as e:
+                        print(f"Failed to import module {module_name}: {e}")
+    print(f"Could not find function '{function_name}'.")
+    return None
 
 def process_coding_response(current_chat, assistant_reply):
     """
@@ -156,15 +197,35 @@ def process_coding_response(current_chat, assistant_reply):
             code_output = output_capture.getvalue().strip()
             print("Execution result:")
             print(code_output)
+        except NameError as e:
+            # Attempt to recover from NameError by searching for and importing the function
+            missing_name = str(e).split("'")[1]
+            # print(f"NameError: {missing_name} not found. Attempting to import...")
+            if search_and_import_function(missing_name):
+                # print(f"Successfully imported {missing_name}. Retrying execution...")
+                try:
+                    output_capture = io.StringIO()  # Reset the output capture
+                    with contextlib.redirect_stdout(output_capture):
+                        exec(code_block, globals())
+                    code_output = output_capture.getvalue().strip()
+                    # print("Execution result:")
+                    print(code_output)
+                except Exception as e:
+                    code_output = f"Error during code execution after import: {e}"
+                    print(code_output)
+            else:
+                code_output = f"Error during code execution: {e}"
+                print(code_output)
         except Exception as e:
             code_output = f"Error during code execution: {e}"
             print(code_output)
 
+        # Pass the execution result to the agent
         print("Passing execution result as next prompt...")
         assistant_reply = current_chat.send_message(f"Execution result: {code_output}")
         print("Assistant:", assistant_reply)
 
-def process_query_response(current_chat, query_agent, assistant_reply, debug=False):
+def process_query_response(current_chat, query_agent, assistant_reply, debug=True):
     """
     Processes the assistant's response in a query session, executing searches and forwarding results.
 

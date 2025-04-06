@@ -1,4 +1,6 @@
 
+desing an alternative capabilites query that has access to a quick summary of all files, then searches the files for function names then for function desriptions and the returns the correct one.
+
 doc für alles generieren, 
 
 doc erweitern+dokumentieren und code base überwachen funktion implementieren (großprojekt)

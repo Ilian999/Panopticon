@@ -1,6 +1,6 @@
 import capabilities.Agent as agent
 # from capabilities import runchat
-import capabilities.chatSetups as run
+from capabilities.chatSetups import *
 from capabilities.interaction import *
     
 if __name__ == "__main__":
@@ -9,5 +9,6 @@ if __name__ == "__main__":
     # run.exe_chat(exe_coder_agent)
     # testAgent = agent.CreateAgent(chat_name="testCandQ", preset="codeAndQuery")
     testAgent = agent.CreateAgent(chat_name="testQuery1", preset="codeAndQuery")
-    run.code_and_query_chat(testAgent)
+    code_and_query_chat(testAgent)
+    # print(search_and_import_function("save_script"))
 
