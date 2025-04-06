@@ -2,61 +2,45 @@ import signal
 import sys
 import os
 import io
+
+from capabilities.constants import CAPABILITIES
+from . import * 
 import contextlib
-
 from capabilities.CapRetrieval import search_code
-from . import *
 from capabilities.Agent import CreateAgent
-from capabilities.interaction import *
 
-# Function to handle termination signals
-def handle_exit_signal(signum, frame):
+def create_exit_signal_handler(current_chat):
     """
-    Handles termination signals to save the current chat and exit the program gracefully.
+    Creates a signal handler function that saves the current chat and exits the program gracefully.
 
     Parameters:
-    signum (int): The signal number.
-    frame (signal frame): The current stack frame.
+    current_chat: The current chat session object.
 
     Returns:
-    None
-
-    Raises:
-    Exception: If an error occurs during chat saving.
-
-    searchterms_1 = ["termination", "signal", "exit", "chat", "save"]
+    function: A signal handler function.
     """
-    global current_chat
-    try:
-        if current_chat:
-            print("\nSaving chat before exiting...")
-            current_chat.save_chat()
-    except Exception as e:
-        pass
-    print("Goodbye!")
-    sys.exit(0)
+    def handle_exit_signal(signum, frame):
+        try:
+            if current_chat:
+                print("\nSaving chat before exiting...")
+                current_chat.save_chat()
+        except Exception as e:
+            print(f"Error saving chat: {e}")
+        print("Goodbye!")
+        sys.exit(0)
+    
+    return handle_exit_signal
 
-# Register signal handlers for Ctrl+C and terminal close
-signal.signal(signal.SIGINT, handle_exit_signal)  # Ctrl+C
-signal.signal(signal.SIGTERM, handle_exit_signal)  # Process termination
-
-# Function to select a chat (new, load, delete, or exit)
-def selectchat(query_chat = False):
+def select_chat(query_chat=False):
     """
     Prompts the user to select a chat option: create a new chat, load an existing chat, delete a chat, or exit.
 
     Parameters:
-    None
+    query_chat (bool): Flag to indicate if this is a query chat.
 
     Returns:
     current_chat: The selected or created chat session.
-
-    Raises:
-    KeyboardInterrupt: If the user interrupts the selection process.
-
-    searchterms_2 = ["chat", "selection", "new", "load", "delete"]
     """
-    global current_chat
     chat_sessions = {}
 
     while True:
@@ -67,13 +51,10 @@ def selectchat(query_chat = False):
             if choice == "1":
                 chat_name = input("Enter a name for the new chat: ").strip()
                 chat_sessions[chat_name] = CreateAgent(chat_name=chat_name)
-                current_chat = chat_sessions[chat_name]
-                print(f"New chat created: {chat_name}")
-                return current_chat
+                return chat_sessions[chat_name]
 
             elif choice == "2":
                 existing_chats = [f.replace(".json", "") for f in os.listdir(chatstoragefolder) if f.endswith(".json")]
-                
                 if not existing_chats:
                     print("No existing chats to load.")
                     continue
@@ -85,8 +66,7 @@ def selectchat(query_chat = False):
                 chat_choice = input("Enter the chat name to load: ").strip()
                 if chat_choice in existing_chats:
                     chat_sessions[chat_choice] = CreateAgent(chat_name=chat_choice)
-                    current_chat = chat_sessions[chat_choice]
-                    return current_chat
+                    return chat_sessions[chat_choice]
                 else:
                     print("Invalid chat name. Try again.")
 
@@ -114,22 +94,24 @@ def selectchat(query_chat = False):
                 print("Invalid option. Please try again.")
 
         except KeyboardInterrupt:
-            handle_exit_signal(None, None)  # Handle Ctrl+C during chat selection
+            print("Exiting...")
+            sys.exit(0)
 
-import io
-import contextlib
-
-def chat_loop(current_chat, process_response):
+def chat_loop(current_chat, process_response=None):
     """
     Handles a user chat loop, processing user input and assistant responses.
+    The function supports either a single processing function or a list of functions.
 
     Parameters:
     current_chat: The current chat session object.
-    process_response (function): A function that processes the assistant's response.
+    process_response (function or list of functions): A function or a list of functions that process the assistant's response.
 
     Returns:
     None
     """
+    signal.signal(signal.SIGINT, create_exit_signal_handler(current_chat))  # Register signal handler
+    signal.signal(signal.SIGTERM, create_exit_signal_handler(current_chat))  # Register signal handler
+
     while True:
         try:
             user_input = input(f"{current_chat.agent.chat_name} - User: ")
@@ -141,25 +123,16 @@ def chat_loop(current_chat, process_response):
             assistant_reply = current_chat.send_message(user_input)
             print("Assistant:", assistant_reply)
 
-            process_response(current_chat, assistant_reply)
+            if process_response:
+                if isinstance(process_response, list):
+                    for func in process_response:
+                        func(current_chat, assistant_reply)
+                else:
+                    process_response(current_chat, assistant_reply)
 
         except KeyboardInterrupt:
-            handle_exit_signal(None, None)  # Handle Ctrl+C
-
-
-def process_chat_response(current_chat, assistant_reply):
-    """
-    Processes the assistant's response in a standard chat session.
-
-    Parameters:
-    current_chat: The current chat session object.
-    assistant_reply (str): The assistant's response.
-
-    Returns:
-    None
-    """
-    pass  # No additional processing needed for regular chat
-
+            print("Exiting...")
+            sys.exit(0)
 
 def process_coding_response(current_chat, assistant_reply):
     """
@@ -191,33 +164,42 @@ def process_coding_response(current_chat, assistant_reply):
         assistant_reply = current_chat.send_message(f"Execution result: {code_output}")
         print("Assistant:", assistant_reply)
 
-
-def simpleloop(current_chat):
+def process_query_response(current_chat, query_agent, assistant_reply, debug=False):
     """
-    Initiates a standard chat loop.
+    Processes the assistant's response in a query session, executing searches and forwarding results.
 
     Parameters:
     current_chat: The current chat session object.
-    
-    Returns:
-    None
-    """
-    chat_loop(current_chat, process_chat_response)
-
-
-def coding_loop(current_chat):
-    """
-    Initiates a coding session loop.
-
-    Parameters:
-    current_chat: The current chat session object.
+    query_agent: The agent handling queries.
+    assistant_reply (str): The assistant's response.
+    debug (bool): If True, display the query agent's reply.
 
     Returns:
-    None
+    None or CAPABILITIES dictionary if <capabilities_summary> is detected.
     """
-    chat_loop(current_chat, process_coding_response)
+    # Return CAPABILITIES directly if <capabilities_summary> is detected
+    while "((q3rys))" in assistant_reply and "((q3ryend))" in assistant_reply:
+            query_block = assistant_reply.split("((q3rys))")[1].split("((q3ryend))")[0].strip()
+            queries = query_block.split("(-div-)")
 
-# Main simple_chat function
+            results = []
+            for query in queries:
+                if "<capabilities_summary>" in query:
+                    results.append(CAPABILITIES)
+                search_results = search_code(query.strip(), top_k=3)
+                results.append(search_results)
+
+            formatted_results = "\n".join(str(result) for result in results)
+            queryAgent_reply = query_agent.send_message(f"Search results: {formatted_results}")
+
+            # Print the queryAgent_reply if debug is enabled
+            if debug:
+                print("Query Agent Reply:", queryAgent_reply)
+
+            print("Passing query result as next prompt...")
+            assistant_reply = current_chat.send_message(f"Query result: {queryAgent_reply}")
+            print("Assistant:", assistant_reply)
+
 def simple_chat(preset_agent=None):
     """
     Starts a simple chat session, either with a preset agent or by selecting a new/existing chat.
@@ -227,27 +209,9 @@ def simple_chat(preset_agent=None):
 
     Returns:
     None
-
-    searchterms_5 = ["simple", "chat", "session", "preset", "select"]
     """
-    global current_chat
-    if preset_agent:
-        current_chat = preset_agent  # Use the passed agent
-        print(f"Chat session started with preset: {current_chat.persona}")
-    else:
-        current_chat = selectchat()  # Select chat (new or existing)
-    
-    simpleloop(current_chat)  # Start the chat loop
-
-'''
-def main():
-    filename = "test_file"
-    file_format = ".txt"
-
-    # Call the create_file_with_format function directly
-    result = create_file_with_format(filename, file_format)
-    print(result)
-    '''
+    current_chat = preset_agent if preset_agent else select_chat()
+    chat_loop(current_chat)
 
 def exe_chat(preset_agent=None):
     """
@@ -258,19 +222,9 @@ def exe_chat(preset_agent=None):
 
     Returns:
     None
-
-    searchterms_6 = ["coding", "chat", "session", "preset", "select"]
     """
-    global current_chat
-    if preset_agent:
-        current_chat = preset_agent  # Use the passed agent
-        print(f"Chat session started with preset: {current_chat.agent.chat_name}")
-    else:
-        current_chat = selectchat()  # Select chat (new or existing)
-    
-    coding_loop(current_chat)  # Start the chat loop
-
-
+    current_chat = preset_agent if preset_agent else select_chat()
+    chat_loop(current_chat, process_coding_response)
 
 def query_chat(preset_agent=None):
     """
@@ -281,77 +235,22 @@ def query_chat(preset_agent=None):
 
     Returns:
     None
-
-    searchterms_7 = ["query", "chat", "session", "information retrieval", "preset", "select"]
     """
-    global current_chat, query_agent
+    current_chat = preset_agent if preset_agent else select_chat(query_chat=True)
+    query_agent = CreateAgent(preset="capQuery")
+    chat_loop(current_chat, lambda chat, reply: process_query_response(chat, query_agent, reply))
 
-    if preset_agent:
-        current_chat = preset_agent  # Use the passed agent
-        # chat_name = current_chat.agent.chat_name
-        # query_agent = CreateAgent(chat_name=f"{chat_name}_query", preset="capQuery") if chat_name else CreateAgent(preset="capQuery")
-        query_agent = CreateAgent(preset="capQuery") 
-        print(f"Query chat session started with preset: {current_chat.persona}")
-    else:
-        current_chat = selectchat(query_chat=True)  # Select chat (new or existing)
-
-    query_loop(current_chat, query_agent)  # Start the query loop
-
-
-def process_query_response(current_chat, query_agent, assistant_reply):
+def code_and_query_chat(preset_agent=None):
     """
-    Processes the assistant's response in a query session, executing searches and forwarding results.
+    Starts a chat session, either with a preset agent or by selecting a new/existing chat.
+    The Agent is capable of querying capabilites and the project as well as executing code
 
     Parameters:
-    current_chat: The current chat session object.
-    query_agent: The agent handling queries.
-    assistant_reply (str): The assistant's response.
+    preset_agent: An optional agent to start the chat session with.
 
     Returns:
     None
     """
-    while "((q3rys))" in assistant_reply and "((q3ryend))" in assistant_reply:
-        # Extract queries inside the wrapper
-        query_block = assistant_reply.split("((q3rys))")[1].split("((q3ryend))")[0].strip()
-        queries = query_block.split("(-div-)")  # Split multiple queries
-
-        results = []
-        for query in queries:
-            search_results = search_code(query.strip(), top_k=3)
-            results.append(search_results)
-
-        # Pass search results as input to the query agent
-        formatted_results = "\n".join(str(result) for result in results)
-        queryAgent_reply = query_agent.send_message(f"Search results: {formatted_results}")
-        print("Passing query result as next prompt...")
-        # print(queryAgent_reply)
-        assistant_reply = current_chat.send_message(f"Query result: {queryAgent_reply}")
-        print("Assistant:", assistant_reply)
-
-
-def query_loop(current_chat, query_agent):
-    """
-    Handles the user input loop for querying information.
-
-    Parameters:
-    current_chat: The current chat session object.
-    query_agent: The agent handling queries.
-
-    Returns:
-    None
-    """
-    while True:
-        try:
-            user_input = input(f"{current_chat.agent.chat_name} - User: ")
-            if user_input.lower() in ["exit", "quit"]:
-                current_chat.save_chat()
-                print("Exiting query session.")
-                break
-
-            assistant_reply = current_chat.send_message(user_input)
-            print("Assistant:", assistant_reply)
-
-            process_query_response(current_chat, query_agent, assistant_reply)
-
-        except KeyboardInterrupt:
-            handle_exit_signal(None, None)  # Handle Ctrl+C
+    current_chat = preset_agent if preset_agent else select_chat(query_chat=True)
+    query_agent = CreateAgent(preset="capQuery")
+    chat_loop(current_chat, [process_coding_response, lambda chat, reply: process_query_response(chat, query_agent, reply)])

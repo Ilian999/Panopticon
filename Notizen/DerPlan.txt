@@ -1,5 +1,3 @@
-cap retireval -arrays entfernen und andere details fixen paths hinzufügen
-
 
 doc für alles generieren, 
 
@@ -9,7 +7,4 @@ retrieve capabilites erweitern - code zurückgeben
 
 select chat erweiter ? ist das notwendig?
 
-code and query implementieren
-
-
-REWATCH VIDEO IN AI PROJECT PLAYLIST REGARDING TITANS AND EXAMINE IT
+REWATCH VIDEO IN AI PROJECT PLAYLIST REGARDING TITANS AND EXAMINE IT -- Titans not yet a thing maybe programm it at a later moment

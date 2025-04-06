@@ -27,9 +27,9 @@ def log_error(self, message):
 def parse_file(filepath):
     """
     Parse a file using the ast module (for functions and classes)
-    and regex (for arrays and dictionaries).
+    and regex (for dictionaries).
 
-    Returns a dict with keys: "functions", "classes", "arrays", "dictionaries".
+    Returns a dict with keys: "functions", "classes", "dictionaries".
 
     Parameters:
         filepath (str): The path to the Python file to be parsed.
@@ -42,7 +42,6 @@ def parse_file(filepath):
     parsed = {
         "functions": [],      # List of dicts: { "head": ..., "doc": ... }
         "classes": [],        # List of dicts: { "head": ..., "doc": ..., "methods": [ { "head":..., "doc":... } ] }
-        "arrays": [],         # List of dicts: { "name":..., "head":..., "doc": ... }
         "dictionaries": []    # List of dicts: { "name":..., "head":..., "doc":..., "body": ... }
     }
 
@@ -66,8 +65,8 @@ def parse_file(filepath):
                     head = lines[node.lineno - 1].strip() if node.lineno - 1 < len(lines) else f"def {node.name}(...)"
                     doc = ast.get_docstring(node)
                     parsed["functions"].append({"head": head, "doc": doc or ""})
-                    # Log the function code for embeddings
-                    log_embedding_input(head + " " + (doc or ""))
+                    # Log the function code for embeddings LOGGING
+                    # log_embedding_input(head + " " + (doc or ""))
 
                 elif isinstance(node, ast.ClassDef):
                     # Class definition
@@ -80,34 +79,20 @@ def parse_file(filepath):
                             method_head = lines[item.lineno - 1].strip() if item.lineno - 1 < len(lines) else f"def {item.name}(...)"
                             method_doc = ast.get_docstring(item)
                             class_entry["methods"].append({"head": method_head, "doc": method_doc or ""})
-                            # Log the method code for embeddings
-                            log_embedding_input(method_head + " " + (method_doc or ""))
+                            # Log the method code for embeddings LOGGING
+                            # log_embedding_input(method_head + " " + (method_doc or ""))
                     parsed["classes"].append(class_entry)
-
-        # Use regex for arrays.
-        # Require an optional docstring ending with a newline before the assignment.
-        array_pattern = re.compile(
-            r'(?:(?P<doc>""".*?""")\s*\n)?(?P<var>\w+)\s*=\s*\[.*?\]',
-            re.DOTALL | re.MULTILINE
-        )
-        for match in array_pattern.finditer(source):
-            var_name = match.group("var")
-            doc = match.group("doc")
-            head_line = match.group(0).splitlines()[0].strip()
-            if not doc:
-                doc = ""
-            else:
-                doc = doc.strip('"""').strip()
-            parsed["arrays"].append({"name": var_name, "head": head_line, "doc": doc})
-            # Log the array code for embeddings
-            log_embedding_input(head_line + " " + doc)
 
         # Use regex for dictionaries.
         # Only match dictionary variable names that are all caps.
         # Also capture the entire dictionary body.
         dict_pattern = re.compile(
-            r'(?:(?P<doc>""".*?""")\s*\n)?(?P<var>[A-Z_]+)\s*=\s*(?P<body>\{.*?\})',
-            re.DOTALL | re.MULTILINE
+            r'''
+            (?:(?P<doc>""".*?""")\s*\n)?  # Optional docstring
+            (?P<var>[A-Z_]+)\s*=\s*       # Variable name
+            (?P<body>\{(?:[^{}]*|\{[^{}]*\})*\})  # Dictionary body, allowing nested dictionaries
+            ''',
+            re.DOTALL | re.MULTILINE | re.VERBOSE
         )
         for match in dict_pattern.finditer(source):
             var_name = match.group("var")
@@ -120,17 +105,17 @@ def parse_file(filepath):
                 doc = doc.strip('"""').strip()
             parsed["dictionaries"].append({
                 "name": var_name,
-                "head": head_line,
                 "doc": doc,
                 "body": body
             })
-            # Log the dictionary code for embeddings
-            log_embedding_input(head_line + " " + doc + " " + body)
+            # Log the dictionary code for embeddings LOGGING
+            # log_embedding_input(head_line + " " + doc + " " + body)
 
     except Exception as e:
         log_error(f"Error processing file {filepath}: {e}")
 
     return parsed
+
 
 
 def get_embedding(text: str, model="text-embedding-ada-002"):
@@ -140,9 +125,23 @@ def get_embedding(text: str, model="text-embedding-ada-002"):
     response = openai.embeddings.create(input=[text], model=EMBEDDING_MODEL)
     return response.data[0].embedding
 
-def generate_and_store_embeddings(path="capabilities", excluded_files=None, excluded_dirs=None, excluded_extensions=None):
+def generate_and_store_embeddings(path="capabilities", excluded_files=None, excluded_dirs=None, excluded_extensions=None, debug=False):
     """
     Generates embeddings for all non-excluded Python files and stores them.
+    
+    Optionally logs code chunks for debugging if debug is set to True.
+    
+    Parameters:
+        path (str): The directory path to search for files.
+        excluded_files (list, optional): List of filenames to exclude.
+        excluded_dirs (list, optional): List of directories to exclude.
+        excluded_extensions (list, optional): List of file extensions to exclude.
+        debug (bool, optional): If True, logs code chunks to a debug file.
+    
+    Returns:
+        None
+
+    searchterms_6 = ["embeddings", "debug", "logging", "parse", "code"]
     """
     if excluded_files is None:
         excluded_files = []
@@ -161,28 +160,27 @@ def generate_and_store_embeddings(path="capabilities", excluded_files=None, excl
             if file not in excluded_files and not any(file.endswith(ext) for ext in excluded_extensions):
                 file_path = os.path.join(root, file)
                 
-                # Parse the file to extract code components (functions, classes, arrays, dictionaries)
+                # Parse the file to extract code components (functions, classes, dictionaries)
                 components = parse_file(file_path)
 
-                # Store chunks for debugging before generating embeddings
-                with open("chunks_for_debugging.log", "a", encoding="utf-8") as debug_file:
-                    for component_type in components:
-                        for component in components[component_type]:
-                            code = component.get("head", "") + " " + component.get("doc", "")
-                            debug_file.write(code + "\n\n")
+                # Optionally log chunks for debugging before generating embeddings
+                if debug:
+                    with open("chunks_for_debugging.log", "a", encoding="utf-8") as debug_file:
+                        for component_type in components:
+                            for component in components[component_type]:
+                                code = component.get("head", "") + " " + component.get("doc", "")
+                                debug_file.write(code + "\n\n")
 
                 # For each component, generate the embedding
                 for component_type in components:
                     for component in components[component_type]:
                         code = component.get("head", "") + " " + component.get("doc", "")
                         
-                        # Log the code snippet before processing
-                        log_embedding_input(code)
-                        
                         # Generate the embedding
                         embedding = get_embedding(code)
                         component["embedding"] = embedding
                         all_embeddings.append(component)
+                        
     # Ensure the parent directory exists
     embedding_dir = os.path.dirname(EMBEDDING_FILE)
     if not os.path.exists(embedding_dir):

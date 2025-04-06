@@ -4,6 +4,6 @@ from capabilities.CapRetrieval import generate_and_store_embeddings, search_code
 if __name__ == "__main__":
 
     query = "I want to create an ai agent"
-    # generate_and_store_embeddings(path="test", excluded_files=None, excluded_dirs=None)
+    generate_and_store_embeddings(path="capabilities")
     # print("Jobs finished")
-    print(search_code(query,2))
+    # print(search_code(query,2))
