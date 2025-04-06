@@ -1,0 +1,321 @@
+{
+    "Agent.py": {
+        "path": "capabilities\\Agent.py",
+        "components": {
+            "delete_chat": {
+                "comp_head": "def delete_chat(chat_name):",
+                "comment": "Deletes a saved chat from the Agent.\n\nArgs:\n    chat_name (str): The name of the chat session to delete.\n\nsearchterms_$_ = [\"delete chat\", \"Agent\", \"session\", \"file\", \"remove\"]",
+                "code": "def delete_chat(chat_name):\nDeletes a saved chat from the Agent.\n\nArgs:\n    chat_name (str): The name of the chat session to delete.\n\nsearchterms_$_ = [\"delete chat\", \"Agent\", \"session\", \"file\", \"remove\"]"
+            },
+            "Agent:": {
+                "comp_head": "class Agent:",
+                "comment": "Class representing a chat agent that interacts with OpenAI's GPT model.\nUSE CREATE_AGENT TO CREATE AGENTS!!\n\nAttributes:\n    api_key (str): OpenAI API key used to authenticate requests.\n    model (str): The model used for generating completions (e.g., 'gpt-4o-mini').\n    chat_name (str): The name used to identify and save the chat session.\n    temperature (float): The temperature setting that controls the randomness of the output.\n    max_tokens (int): The maximum number of tokens (words) in the model's output.\n    system_content (str): The system-level instruction that sets the context for the conversation.\n    messages (list): The list of messages exchanged in the chat session.\n\nMethods:\n    save_chat(): Saves the current chat to a file.\n    load_chat(chat_name): Loads a chat from a file.\n    send_message(message: str): Sends a message to the GPT model and appends the reply to the conversation history.\n    delete_chat(chat_name): Deletes a saved chat file.\n\nsearchterms_$_ = [\"chat agent\", \"OpenAI\", \"GPT model\", \"conversation\", \"messages\"]",
+                "code": "class Agent:\nClass representing a chat agent that interacts with OpenAI's GPT model.\nUSE CREATE_AGENT TO CREATE AGENTS!!\n\nAttributes:\n    api_key (str): OpenAI API key used to authenticate requests.\n    model (str): The model used for generating completions (e.g., 'gpt-4o-mini').\n    chat_name (str): The name used to identify and save the chat session.\n    temperature (float): The temperature setting that controls the randomness of the output.\n    max_tokens (int): The maximum number of tokens (words) in the model's output.\n    system_content (str): The system-level instruction that sets the context for the conversation.\n    messages (list): The list of messages exchanged in the chat session.\n\nMethods:\n    save_chat(): Saves the current chat to a file.\n    load_chat(chat_name): Loads a chat from a file.\n    send_message(message: str): Sends a message to the GPT model and appends the reply to the conversation history.\n    delete_chat(chat_name): Deletes a saved chat file.\n\nsearchterms_$_ = [\"chat agent\", \"OpenAI\", \"GPT model\", \"conversation\", \"messages\"]",
+                "methods": {
+                    "__init__": {
+                        "comp_head": "def __init__(self, system_content, temperature, max_tokens, model=\"gpt-4o-mini\", api_key=None, chat_name=None):",
+                        "comment": "Initializes an Agent instance with the provided parameters.\n\nArgs:\n    system_content (str): Instruction to set the system context for the conversation.\n    temperature (float): Temperature for controlling response randomness.\n    max_tokens (int): Maximum token limit for the model's response.\n    model (str): The model to use for generating completions.\n    api_key (str): OpenAI API key.\n    chat_name (str): The name to identify the chat session.\n\nRaises:\n    ValueError: If no valid API key is provided.\n\nsearchterms_$_ = [\"initialization\", \"parameters\", \"Agent\", \"OpenAI API\", \"chat session\"]",
+                        "code": "def __init__(self, system_content, temperature, max_tokens, model=\"gpt-4o-mini\", api_key=None, chat_name=None):\nInitializes an Agent instance with the provided parameters.\n\nArgs:\n    system_content (str): Instruction to set the system context for the conversation.\n    temperature (float): Temperature for controlling response randomness.\n    max_tokens (int): Maximum token limit for the model's response.\n    model (str): The model to use for generating completions.\n    api_key (str): OpenAI API key.\n    chat_name (str): The name to identify the chat session.\n\nRaises:\n    ValueError: If no valid API key is provided.\n\nsearchterms_$_ = [\"initialization\", \"parameters\", \"Agent\", \"OpenAI API\", \"chat session\"]"
+                    },
+                    "save_chat": {
+                        "comp_head": "def save_chat(self):",
+                        "comment": "Saves the current conversation to a file in the chat storage folder.\n\nThe chat will be saved with the name of the chat session, and the file will be in JSON format.\n\nsearchterms_$_ = [\"save chat\", \"file\", \"JSON\", \"chat storage\", \"session\"]",
+                        "code": "def save_chat(self):\nSaves the current conversation to a file in the chat storage folder.\n\nThe chat will be saved with the name of the chat session, and the file will be in JSON format.\n\nsearchterms_$_ = [\"save chat\", \"file\", \"JSON\", \"chat storage\", \"session\"]"
+                    },
+                    "load_chat": {
+                        "comp_head": "def load_chat(self, chat_name):",
+                        "comment": "Loads a chat from a file.\n\nArgs:\n    chat_name (str): The name of the chat session to load.\n\nIf the chat session file does not exist, it will print an error message.\n\nsearchterms_$_ = [\"load chat\", \"file\", \"error handling\", \"chat session\", \"JSON\"]",
+                        "code": "def load_chat(self, chat_name):\nLoads a chat from a file.\n\nArgs:\n    chat_name (str): The name of the chat session to load.\n\nIf the chat session file does not exist, it will print an error message.\n\nsearchterms_$_ = [\"load chat\", \"file\", \"error handling\", \"chat session\", \"JSON\"]"
+                    },
+                    "send_message": {
+                        "comp_head": "def send_message(self, message: str) -> str:",
+                        "comment": "Sends a message to the GPT model and appends the reply to the conversation history.\n\nArgs:\n    message (str): The user message to send to the GPT model.\n\nReturns:\n    str: The model's response.\n\nsearchterms_$_ = [\"send message\", \"GPT model\", \"response\", \"conversation history\", \"user message\"]",
+                        "code": "def send_message(self, message: str) -> str:\nSends a message to the GPT model and appends the reply to the conversation history.\n\nArgs:\n    message (str): The user message to send to the GPT model.\n\nReturns:\n    str: The model's response.\n\nsearchterms_$_ = [\"send message\", \"GPT model\", \"response\", \"conversation history\", \"user message\"]"
+                    },
+                    "delete_chat": {
+                        "comp_head": "def delete_chat(chat_name):",
+                        "comment": "Deletes a saved chat file.\n\nArgs:\n    chat_name (str): The name of the chat session to delete.\n\nIf the chat file does not exist, it will print an error message.\n\nsearchterms_$_ = [\"delete chat\", \"file\", \"error handling\", \"chat session\", \"remove\"]",
+                        "code": "def delete_chat(chat_name):\nDeletes a saved chat file.\n\nArgs:\n    chat_name (str): The name of the chat session to delete.\n\nIf the chat file does not exist, it will print an error message.\n\nsearchterms_$_ = [\"delete chat\", \"file\", \"error handling\", \"chat session\", \"remove\"]"
+                    }
+                }
+            },
+            "CreateAgent:": {
+                "comp_head": "class CreateAgent:",
+                "comment": "Class responsible for creating an agent with predefined parameters or custom values.\n\nAttributes:\n    agent (Agent): The Agent instance that handles the interaction with the GPT model.\n\nMethods:\n    send_message(message: str): Sends a message to the Agent instance.\n    save_chat(): Saves the current chat of the Agent.\n    load_chat(chat_name): Loads a saved chat into the Agent.\n    delete_chat(chat_name): Deletes a saved chat from the Agent.\n\nsearchterms_$_ = [\"create agent\", \"agent instance\", \"parameters\", \"GPT model\", \"interaction\"]",
+                "code": "class CreateAgent:\nClass responsible for creating an agent with predefined parameters or custom values.\n\nAttributes:\n    agent (Agent): The Agent instance that handles the interaction with the GPT model.\n\nMethods:\n    send_message(message: str): Sends a message to the Agent instance.\n    save_chat(): Saves the current chat of the Agent.\n    load_chat(chat_name): Loads a saved chat into the Agent.\n    delete_chat(chat_name): Deletes a saved chat from the Agent.\n\nsearchterms_$_ = [\"create agent\", \"agent instance\", \"parameters\", \"GPT model\", \"interaction\"]",
+                "methods": {
+                    "__init__": {
+                        "comp_head": "def __init__(self, model=\"gpt-4o-mini\", api_key=None, chat_name=None,",
+                        "comment": "Initializes a CreateAgent instance with the provided parameters.\n\nArgs:\n    model (str): The model to use for generating completions.\n    api_key (str): OpenAI API key.\n    chat_name (str): The name to identify the chat session.\n    system_content (str): System content to initialize the conversation context.\n    temperature (float): The temperature for the model's output randomness.\n    max_tokens (int): Maximum number of tokens allowed in the model's output.\n    preset (str): Predefined parameter set to use for the agent configuration.\n    persona (str): Optional persona to override the default system content.\n\nRaises:\n    ValueError: If no valid chat name is provided.\n\nsearchterms_$_ = [\"initialize\", \"CreateAgent\", \"parameters\", \"agent configuration\", \"preset\"]",
+                        "code": "def __init__(self, model=\"gpt-4o-mini\", api_key=None, chat_name=None,\nInitializes a CreateAgent instance with the provided parameters.\n\nArgs:\n    model (str): The model to use for generating completions.\n    api_key (str): OpenAI API key.\n    chat_name (str): The name to identify the chat session.\n    system_content (str): System content to initialize the conversation context.\n    temperature (float): The temperature for the model's output randomness.\n    max_tokens (int): Maximum number of tokens allowed in the model's output.\n    preset (str): Predefined parameter set to use for the agent configuration.\n    persona (str): Optional persona to override the default system content.\n\nRaises:\n    ValueError: If no valid chat name is provided.\n\nsearchterms_$_ = [\"initialize\", \"CreateAgent\", \"parameters\", \"agent configuration\", \"preset\"]"
+                    },
+                    "send_message": {
+                        "comp_head": "def send_message(self, message: str) -> str:",
+                        "comment": "Sends a message to the Agent instance.\n\nArgs:\n    message (str): The message to send.\n\nReturns:\n    str: The response from the Agent instance.\n\nsearchterms_$_ = [\"send message\", \"Agent\", \"response\", \"interaction\", \"user input\"]",
+                        "code": "def send_message(self, message: str) -> str:\nSends a message to the Agent instance.\n\nArgs:\n    message (str): The message to send.\n\nReturns:\n    str: The response from the Agent instance.\n\nsearchterms_$_ = [\"send message\", \"Agent\", \"response\", \"interaction\", \"user input\"]"
+                    },
+                    "save_chat": {
+                        "comp_head": "def save_chat(self):",
+                        "comment": "Saves the current chat of the Agent.\n\nsearchterms_$_ = [\"save chat\", \"Agent\", \"current chat\", \"file\", \"session\"]",
+                        "code": "def save_chat(self):\nSaves the current chat of the Agent.\n\nsearchterms_$_ = [\"save chat\", \"Agent\", \"current chat\", \"file\", \"session\"]"
+                    },
+                    "load_chat": {
+                        "comp_head": "def load_chat(self, chat_name):",
+                        "comment": "Loads a saved chat into the Agent.\n\nArgs:\n    chat_name (str): The name of the chat session to load.\n\nsearchterms_$_ = [\"load chat\", \"Agent\", \"session\", \"file\", \"retrieve\"]",
+                        "code": "def load_chat(self, chat_name):\nLoads a saved chat into the Agent.\n\nArgs:\n    chat_name (str): The name of the chat session to load.\n\nsearchterms_$_ = [\"load chat\", \"Agent\", \"session\", \"file\", \"retrieve\"]"
+                    }
+                }
+            }
+        }
+    },
+    "AgentSetups.py": {
+        "path": "capabilities\\AgentSetups.py",
+        "components": {}
+    },
+    "CapRetrieval.py": {
+        "path": "capabilities\\CapRetrieval.py",
+        "components": {
+            "log_embedding_input": {
+                "comp_head": "def log_embedding_input(code: str, log_file=\"embedding_inputs.log\"):",
+                "comment": "Appends the code snippet to a log file for debugging purposes.",
+                "code": "def log_embedding_input(code: str, log_file=\"embedding_inputs.log\"):\nAppends the code snippet to a log file for debugging purposes."
+            },
+            "log_error": {
+                "comp_head": "def log_error(self, message):",
+                "comment": "Append error messages to the log file.",
+                "code": "def log_error(self, message):\nAppend error messages to the log file."
+            },
+            "parse_file": {
+                "comp_head": "def parse_file(filepath):",
+                "comment": "Parse a file using the ast module (for functions and classes)\nand regex (for dictionaries).\n\nReturns a dict with keys: \"functions\", \"classes\", \"dictionaries\".\n\nParameters:\n    filepath (str): The path to the Python file to be parsed.\n\nReturns:\n    dict: A dictionary containing parsed components of the file.\n\nsearchterms_2 = [\"parse\", \"file\", \"AST\", \"regex\", \"components\"]",
+                "code": "def parse_file(filepath):\nParse a file using the ast module (for functions and classes)\nand regex (for dictionaries).\n\nReturns a dict with keys: \"functions\", \"classes\", \"dictionaries\".\n\nParameters:\n    filepath (str): The path to the Python file to be parsed.\n\nReturns:\n    dict: A dictionary containing parsed components of the file.\n\nsearchterms_2 = [\"parse\", \"file\", \"AST\", \"regex\", \"components\"]"
+            },
+            "get_embedding": {
+                "comp_head": "def get_embedding(text: str, model=\"text-embedding-ada-002\"):",
+                "comment": "Generates a text embedding using OpenAI's text-embedding-ada-002.",
+                "code": "def get_embedding(text: str, model=\"text-embedding-ada-002\"):\nGenerates a text embedding using OpenAI's text-embedding-ada-002."
+            },
+            "generate_and_store_embeddings": {
+                "comp_head": "def generate_and_store_embeddings(path=\"capabilities\", excluded_files=None, excluded_dirs=None, excluded_extensions=None, debug=False):",
+                "comment": "Generates embeddings for all non-excluded Python files and stores them.\n\nOptionally logs code chunks for debugging if debug is set to True.\n\nParameters:\n    path (str): The directory path to search for files.\n    excluded_files (list, optional): List of filenames to exclude.\n    excluded_dirs (list, optional): List of directories to exclude.\n    excluded_extensions (list, optional): List of file extensions to exclude.\n    debug (bool, optional): If True, logs code chunks to a debug file.\n\nReturns:\n    None\n\nsearchterms_6 = [\"embeddings\", \"debug\", \"logging\", \"parse\", \"code\"]",
+                "code": "def generate_and_store_embeddings(path=\"capabilities\", excluded_files=None, excluded_dirs=None, excluded_extensions=None, debug=False):\nGenerates embeddings for all non-excluded Python files and stores them.\n\nOptionally logs code chunks for debugging if debug is set to True.\n\nParameters:\n    path (str): The directory path to search for files.\n    excluded_files (list, optional): List of filenames to exclude.\n    excluded_dirs (list, optional): List of directories to exclude.\n    excluded_extensions (list, optional): List of file extensions to exclude.\n    debug (bool, optional): If True, logs code chunks to a debug file.\n\nReturns:\n    None\n\nsearchterms_6 = [\"embeddings\", \"debug\", \"logging\", \"parse\", \"code\"]"
+            },
+            "load_embeddings": {
+                "comp_head": "def load_embeddings():",
+                "comment": "Loads stored code embeddings from the JSON file.\n\nReturns a list of dictionaries, each containing:\n- `path`: The file where the code is located.\n- `code`: The documented code.\n- `searchterms`: The extracted keywords.\n- `embedding`: The vector representation of the code.",
+                "code": "def load_embeddings():\nLoads stored code embeddings from the JSON file.\n\nReturns a list of dictionaries, each containing:\n- `path`: The file where the code is located.\n- `code`: The documented code.\n- `searchterms`: The extracted keywords.\n- `embedding`: The vector representation of the code."
+            },
+            "get_query_embedding": {
+                "comp_head": "def get_query_embedding(query: str) -> np.ndarray:",
+                "comment": "Generates an embedding for the given query using OpenAI's embedding model.\n\nReturns a NumPy array representing the embedding.",
+                "code": "def get_query_embedding(query: str) -> np.ndarray:\nGenerates an embedding for the given query using OpenAI's embedding model.\n\nReturns a NumPy array representing the embedding."
+            },
+            "cosine_similarity": {
+                "comp_head": "def cosine_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:",
+                "comment": "Computes the cosine similarity between two vectors.\n\nReturns a similarity score between -1 and 1.",
+                "code": "def cosine_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:\nComputes the cosine similarity between two vectors.\n\nReturns a similarity score between -1 and 1."
+            },
+            "search_code": {
+                "comp_head": "def search_code(query: str, top_k: int = 3):",
+                "comment": "Searches for the most relevant code components based on the query.\n\n- Converts the query to an embedding.\n- Computes cosine similarity with stored embeddings.\n- Returns the top_k most relevant code components.\n\nParameters:\n- query: The user's search query.\n- top_k: Number of top matches to return.\n\nReturns a list of dictionaries containing:\n- `path`: The file where the code is found.\n- `code`: The documented code.",
+                "code": "def search_code(query: str, top_k: int = 3):\nSearches for the most relevant code components based on the query.\n\n- Converts the query to an embedding.\n- Computes cosine similarity with stored embeddings.\n- Returns the top_k most relevant code components.\n\nParameters:\n- query: The user's search query.\n- top_k: Number of top matches to return.\n\nReturns a list of dictionaries containing:\n- `path`: The file where the code is found.\n- `code`: The documented code."
+            }
+        }
+    },
+    "chatSetups.py": {
+        "path": "capabilities\\chatSetups.py",
+        "components": {
+            "create_exit_signal_handler": {
+                "comp_head": "def create_exit_signal_handler(current_chat):",
+                "comment": "Creates a signal handler function that saves the current chat and exits the program gracefully.\n\nParameters:\ncurrent_chat: The current chat session object.\n\nReturns:\nfunction: A signal handler function.",
+                "code": "def create_exit_signal_handler(current_chat):\nCreates a signal handler function that saves the current chat and exits the program gracefully.\n\nParameters:\ncurrent_chat: The current chat session object.\n\nReturns:\nfunction: A signal handler function."
+            },
+            "select_chat": {
+                "comp_head": "def select_chat(query_chat=False):",
+                "comment": "Prompts the user to select a chat option: create a new chat, load an existing chat, delete a chat, or exit.\n\nParameters:\nquery_chat (bool): Flag to indicate if this is a query chat.\n\nReturns:\ncurrent_chat: The selected or created chat session.",
+                "code": "def select_chat(query_chat=False):\nPrompts the user to select a chat option: create a new chat, load an existing chat, delete a chat, or exit.\n\nParameters:\nquery_chat (bool): Flag to indicate if this is a query chat.\n\nReturns:\ncurrent_chat: The selected or created chat session."
+            },
+            "chat_loop": {
+                "comp_head": "def chat_loop(current_chat, process_response=None):",
+                "comment": "Handles a user chat loop, processing user input and assistant responses.\nThe function supports either a single processing function or a list of functions.\n\nParameters:\ncurrent_chat: The current chat session object.\nprocess_response (function or list of functions): A function or a list of functions that process the assistant's response.\n\nReturns:\nNone",
+                "code": "def chat_loop(current_chat, process_response=None):\nHandles a user chat loop, processing user input and assistant responses.\nThe function supports either a single processing function or a list of functions.\n\nParameters:\ncurrent_chat: The current chat session object.\nprocess_response (function or list of functions): A function or a list of functions that process the assistant's response.\n\nReturns:\nNone"
+            },
+            "search_and_import_function": {
+                "comp_head": "def search_and_import_function(function_name):",
+                "comment": "Searches for a function in the codebase and imports it if found.\n\nParameters:\nfunction_name (str): The name of the function to search for.\n\nReturns:\nfunction: The function object if found and imported, None otherwise.",
+                "code": "def search_and_import_function(function_name):\nSearches for a function in the codebase and imports it if found.\n\nParameters:\nfunction_name (str): The name of the function to search for.\n\nReturns:\nfunction: The function object if found and imported, None otherwise."
+            },
+            "process_coding_response": {
+                "comp_head": "def process_coding_response(current_chat, assistant_reply):",
+                "comment": "Processes the assistant's response in a coding session, executing detected code blocks.\n\nParameters:\ncurrent_chat: The current chat session object.\nassistant_reply (str): The assistant's response.\n\nReturns:\nstr: The updated assistant reply after processing the code block.",
+                "code": "def process_coding_response(current_chat, assistant_reply):\nProcesses the assistant's response in a coding session, executing detected code blocks.\n\nParameters:\ncurrent_chat: The current chat session object.\nassistant_reply (str): The assistant's response.\n\nReturns:\nstr: The updated assistant reply after processing the code block."
+            },
+            "process_query_response": {
+                "comp_head": "def process_query_response(current_chat, assistant_reply, debug=True, query_type=\"v1\"):",
+                "comment": "Processes the assistant's response in a query session, executing searches and forwarding results.\n\nParameters:\ncurrent_chat: The current chat session object.\nquery_agent: The agent handling queries.\nassistant_reply (str): The assistant's response.\ndebug (bool): If True, display the query agent's reply.\n\nReturns:\nstr: The updated assistant reply after processing the query.",
+                "code": "def process_query_response(current_chat, assistant_reply, debug=True, query_type=\"v1\"):\nProcesses the assistant's response in a query session, executing searches and forwarding results.\n\nParameters:\ncurrent_chat: The current chat session object.\nquery_agent: The agent handling queries.\nassistant_reply (str): The assistant's response.\ndebug (bool): If True, display the query agent's reply.\n\nReturns:\nstr: The updated assistant reply after processing the query."
+            },
+            "code_and_query_chat": {
+                "comp_head": "def code_and_query_chat(preset_agent=None):",
+                "comment": "Starts a chat session, either with a preset agent or by selecting a new/existing chat.\nThe Agent is capable of querying capabilities and the project as well as executing code.\n\nParameters:\npreset_agent: An optional agent to start the chat session with.\n\nReturns:\nNone",
+                "code": "def code_and_query_chat(preset_agent=None):\nStarts a chat session, either with a preset agent or by selecting a new/existing chat.\nThe Agent is capable of querying capabilities and the project as well as executing code.\n\nParameters:\npreset_agent: An optional agent to start the chat session with.\n\nReturns:\nNone"
+            },
+            "simple_chat": {
+                "comp_head": "def simple_chat(preset_agent=None):",
+                "comment": "Starts a simple chat session, either with a preset agent or by selecting a new/existing chat.\n\nParameters:\npreset_agent: An optional agent to start the chat session with.\n\nReturns:\nNone",
+                "code": "def simple_chat(preset_agent=None):\nStarts a simple chat session, either with a preset agent or by selecting a new/existing chat.\n\nParameters:\npreset_agent: An optional agent to start the chat session with.\n\nReturns:\nNone"
+            },
+            "exe_chat": {
+                "comp_head": "def exe_chat(preset_agent=None):",
+                "comment": "Starts a coding chat session, either with a preset agent or by selecting a new/existing chat.\n\nParameters:\npreset_agent: An optional agent to start the chat session with.\n\nReturns:\nNone",
+                "code": "def exe_chat(preset_agent=None):\nStarts a coding chat session, either with a preset agent or by selecting a new/existing chat.\n\nParameters:\npreset_agent: An optional agent to start the chat session with.\n\nReturns:\nNone"
+            },
+            "query_chat": {
+                "comp_head": "def query_chat(preset_agent=None):",
+                "comment": "Starts a query chat session, either with a preset agent or by selecting a new/existing chat.\n\nParameters:\npreset_agent: An optional agent to start the chat session with.\n\nReturns:\nNone",
+                "code": "def query_chat(preset_agent=None):\nStarts a query chat session, either with a preset agent or by selecting a new/existing chat.\n\nParameters:\npreset_agent: An optional agent to start the chat session with.\n\nReturns:\nNone"
+            }
+        }
+    },
+    "document.py": {
+        "path": "capabilities\\document.py",
+        "components": {
+            "document_file": {
+                "comp_head": "def document_file(file_path: str):",
+                "comment": "This function processes a single Python file to generate and add documentation using an agent.\nThe documentation will be wrapped between BEGIN_$nti and END_$kso.\n\nParameters:\n- file_path (str): The path to the Python file to be documented.\n\nReturns:\nNone\n\nRaises:\nException: If there is an error during the documentation process.\n\nsearchterms_$_: [\"documentation\", \"file processing\", \"agent\"]",
+                "code": "def document_file(file_path: str):\nThis function processes a single Python file to generate and add documentation using an agent.\nThe documentation will be wrapped between BEGIN_$nti and END_$kso.\n\nParameters:\n- file_path (str): The path to the Python file to be documented.\n\nReturns:\nNone\n\nRaises:\nException: If there is an error during the documentation process.\n\nsearchterms_$_: [\"documentation\", \"file processing\", \"agent\"]"
+            },
+            "document_files_in_directory": {
+                "comp_head": "def document_files_in_directory(directory, excluded_files: list, excluded_dirs: list, excluded_extensions: list):",
+                "comment": "This function processes all files in a directory (except excluded ones) in parallel.\nEach file is documented by a separate agent.\n\nParameters:\n- directory (str): The path to the directory to process.\n- excluded_files (list): List of specific files to exclude from processing.\n- excluded_dirs (list): List of subdirectories to exclude from processing.\n- excluded_extensions (list): List of file extensions to exclude from processing.\n\nReturns:\nNone\n\nsearchterms_$_: [\"directory processing\", \"parallel execution\", \"file exclusion\"]",
+                "code": "def document_files_in_directory(directory, excluded_files: list, excluded_dirs: list, excluded_extensions: list):\nThis function processes all files in a directory (except excluded ones) in parallel.\nEach file is documented by a separate agent.\n\nParameters:\n- directory (str): The path to the directory to process.\n- excluded_files (list): List of specific files to exclude from processing.\n- excluded_dirs (list): List of subdirectories to exclude from processing.\n- excluded_extensions (list): List of file extensions to exclude from processing.\n\nReturns:\nNone\n\nsearchterms_$_: [\"directory processing\", \"parallel execution\", \"file exclusion\"]"
+            },
+            "process_directory": {
+                "comp_head": "def process_directory(path = \"capabilities\", excluded_files: list = None, excluded_dirs: list = None, excluded_extensions: list = None):",
+                "comment": "Main function to process a directory with exclusion lists for files and extensions.\n\nParameters:\n- path (str): The path to the directory containing Python files.\n- excluded_files (list): List of specific filenames to exclude from processing.\n- excluded_dirs (list): List of subdirectories to exclude from processing.\n- excluded_extensions (list): List of file extensions to exclude from processing.\n\nReturns:\nNone\n\nsearchterms_$_: [\"directory processing\", \"exclusions\", \"file documentation\"]",
+                "code": "def process_directory(path = \"capabilities\", excluded_files: list = None, excluded_dirs: list = None, excluded_extensions: list = None):\nMain function to process a directory with exclusion lists for files and extensions.\n\nParameters:\n- path (str): The path to the directory containing Python files.\n- excluded_files (list): List of specific filenames to exclude from processing.\n- excluded_dirs (list): List of subdirectories to exclude from processing.\n- excluded_extensions (list): List of file extensions to exclude from processing.\n\nReturns:\nNone\n\nsearchterms_$_: [\"directory processing\", \"exclusions\", \"file documentation\"]"
+            }
+        }
+    },
+    "interaction.py": {
+        "path": "capabilities\\interaction.py",
+        "components": {
+            "save_script": {
+                "comp_head": "def save_script(filename, content):",
+                "comment": "Saves the content to the specified file in the 'capabilities' subfolder.\n\n:param filename: The name of the script (without .py extension) (str)\n:param content: The content of the script that needs to be saved (as multiline string) (str)\n:return: None\n:raises Exception: If an error occurs while saving the file.\n\nsearchterms_01 = [\"save\", \"script\", \"file\", \"capabilities\", \"content\"]",
+                "code": "def save_script(filename, content):\nSaves the content to the specified file in the 'capabilities' subfolder.\n\n:param filename: The name of the script (without .py extension) (str)\n:param content: The content of the script that needs to be saved (as multiline string) (str)\n:return: None\n:raises Exception: If an error occurs while saving the file.\n\nsearchterms_01 = [\"save\", \"script\", \"file\", \"capabilities\", \"content\"]"
+            },
+            "append_code": {
+                "comp_head": "def append_code(filename, content):",
+                "comment": "Appends the code to the specified file in the 'capabilities' subfolder.\n\n:param filename: The name of the file (with .py extension) to append to. (str)\n:param content: The content to append to the file. (str)\n:return: A success or error message (str)\n:raises FileNotFoundError: If the specified file does not exist.\n:raises Exception: If an error occurs while appending to the file.\n\nsearchterms_02 = [\"append\", \"code\", \"file\", \"capabilities\", \"content\"]",
+                "code": "def append_code(filename, content):\nAppends the code to the specified file in the 'capabilities' subfolder.\n\n:param filename: The name of the file (with .py extension) to append to. (str)\n:param content: The content to append to the file. (str)\n:return: A success or error message (str)\n:raises FileNotFoundError: If the specified file does not exist.\n:raises Exception: If an error occurs while appending to the file.\n\nsearchterms_02 = [\"append\", \"code\", \"file\", \"capabilities\", \"content\"]"
+            },
+            "create_file_with_format": {
+                "comp_head": "def create_file_with_format(filename, file_format):",
+                "comment": "Creates or saves a new file with the specified format in the 'capabilities' subfolder.\n\n:param filename: The name of the file (without extension) to create. (str)\n:param file_format: The format of the file (e.g., .txt, .py). (str)\n:return: A success message indicating the file was created (str)\n:raises Exception: If an error occurs while creating the file.\n\nsearchterms_03 = [\"create\", \"file\", \"format\", \"capabilities\", \"default\"]",
+                "code": "def create_file_with_format(filename, file_format):\nCreates or saves a new file with the specified format in the 'capabilities' subfolder.\n\n:param filename: The name of the file (without extension) to create. (str)\n:param file_format: The format of the file (e.g., .txt, .py). (str)\n:return: A success message indicating the file was created (str)\n:raises Exception: If an error occurs while creating the file.\n\nsearchterms_03 = [\"create\", \"file\", \"format\", \"capabilities\", \"default\"]"
+            },
+            "get_file_structure": {
+                "comp_head": "def get_file_structure(directory_path='capabilities'):",
+                "comment": "",
+                "code": "def get_file_structure(directory_path='capabilities'):\n"
+            }
+        }
+    },
+    "intQuery.py": {
+        "path": "capabilities\\intQuery.py",
+        "components": {
+            "generate_and_store_structure": {
+                "comp_head": "def generate_and_store_structure(path=\"capabilities\", excluded_files=None, excluded_dirs=None, excluded_extensions=None, output_file=\"layered_structure.json\"):",
+                "comment": "Generates a layered dictionary representing the code components (functions, classes, dictionaries)\nfrom all non-excluded Python files and stores the result in a JSON file.\n\nThe resulting structure is as follows:\n{\n    filename: {\n        \"path\": filepath,\n        \"components\": {\n            comp_name: {\n                \"comp_head\": <header string>,\n                \"comment\": <docstring or comment>,\n                \"code\": <combined header and comment>,\n                // For classes, an additional \"methods\" key is added:\n                \"methods\": {\n                    method_name: {\n                        \"comp_head\": <method header>,\n                        \"comment\": <method docstring>,\n                        \"code\": <combined header and docstring>\n                    },\n                    ...\n                }\n            },\n            ...\n        }\n    },\n    ...\n}\n\nParameters:\n    path (str): The directory path to search for files.\n    excluded_files (list, optional): List of filenames to exclude.\n    excluded_dirs (list, optional): List of directories to exclude.\n    excluded_extensions (list, optional): List of file extensions to exclude.\n    output_file (str, optional): The path to the JSON file where the structure will be stored.\n\nReturns:\n    dict: A dictionary containing the layered structure of components.\n\nsearchterms_6 = [\"layered\", \"structure\", \"components\", \"parse\", \"code\", \"JSON\"]",
+                "code": "def generate_and_store_structure(path=\"capabilities\", excluded_files=None, excluded_dirs=None, excluded_extensions=None, output_file=\"layered_structure.json\"):\nGenerates a layered dictionary representing the code components (functions, classes, dictionaries)\nfrom all non-excluded Python files and stores the result in a JSON file.\n\nThe resulting structure is as follows:\n{\n    filename: {\n        \"path\": filepath,\n        \"components\": {\n            comp_name: {\n                \"comp_head\": <header string>,\n                \"comment\": <docstring or comment>,\n                \"code\": <combined header and comment>,\n                // For classes, an additional \"methods\" key is added:\n                \"methods\": {\n                    method_name: {\n                        \"comp_head\": <method header>,\n                        \"comment\": <method docstring>,\n                        \"code\": <combined header and docstring>\n                    },\n                    ...\n                }\n            },\n            ...\n        }\n    },\n    ...\n}\n\nParameters:\n    path (str): The directory path to search for files.\n    excluded_files (list, optional): List of filenames to exclude.\n    excluded_dirs (list, optional): List of directories to exclude.\n    excluded_extensions (list, optional): List of file extensions to exclude.\n    output_file (str, optional): The path to the JSON file where the structure will be stored.\n\nReturns:\n    dict: A dictionary containing the layered structure of components.\n\nsearchterms_6 = [\"layered\", \"structure\", \"components\", \"parse\", \"code\", \"JSON\"]"
+            }
+        }
+    },
+    "Personasandpresets.py": {
+        "path": "capabilities\\Personasandpresets.py",
+        "components": {
+            "PERSONAS": {
+                "comp_head": "",
+                "comment": "Define personas (which only override the system content)",
+                "code": "{\n    \"coder\": \"You are an expert coder, proficient in Python, JavaScript, and many other languages.\",\n    \"assistant\": \"You are a friendly assistant\",\n    \"default\": \"You are a friendly assistant\",\n    \"exe_Coder\": f\"\"\"You are an expert coding assistant. When given an instruction, first provide a clear, detailed,\n    step-by-step plan outlining your approach, including any assumptions or clarifying questions you may have. \n    Then, implement your solution iteratively across multiple prompts. When outputting Python code, wrap it between the markers {EXE_MARKER}\n    and {EXE_MARKER_END}. The code enclosed within these markers will be executed after your response, and the output will be provided as the \n    next prompt's input. Ensure your responses are well-structured, include concise comments, and follow best coding practices. \n    Feel free to ask for the user's help or clarification during development if necessary.\"\"\",\n    \"documenter\": f\"\"\"\n                You are a code documentation assistant. Your task is to document the code in the most concise and readable way possible. The result is intended to be read by Ai-agents so always be consistent with and concise with your output.\n                Always document:\n                - Classes with a class-level docstring explaining their purpose.\n                - Functions with docstrings detailing their functionality, arguments, return types, and any exceptions they raise.\n                - Only Dictionaries and Arrays, that are important with a short description of its content. \n                When documenting:\n                - Always use triple double quotes to wrap docstrings, even when documenting Arrays or Dictionaries.\n                - For Arrays or Dictionaries place the docstring directly above it.\n                - Ensure docstrings are clear, concise, and follow best practices. Be specific about input and output types for functions and methods.\n                - Be clear about the structure and purpose of arrays and dictionaries.\n                \n                The output should contain only the code, wrapped in between {DOC_BEGIN_MARKER} and {DOC_END_MARKER} with documentation for each class, function, array, and dictionary.\n            \"\"\",\n            \"documenterRAG\": f\"\"\"\n                You are a code documentation assistant. Your task is to transform the given source code by inserting clear, concise, and consistent documentation comments for all significant code components. The output must contain only the documented code (with no extra commentary) and must follow these guidelines:\n\n                1. **Classes:**\n                - Immediately after the class declaration, insert a class-level docstring enclosed in triple double quotes.\n                - The docstring must clearly explain the classs purpose and key responsibilities.\n                - Append within the same docstring an array named searchterms_$_ containing 3-5 distinctive keywords that succinctly describe the classs functionality and key parameters.\n\n                2. **Functions/Methods:**\n                - Immediately after the function or method definition, add a docstring (using triple double quotes) that includes:\n                    - A brief summary of the function/methods purpose.\n                    - A description of each parameter (including types), return values, and any raised exceptions.\n                - Append within the same docstring an array named searchterms_$_ containing 3-5 distinctive keywords that capture the function/methods behavior.\n\n                3. **Dictionaries and Arrays:**\n                - For any important dictionary or array, insert a docstring directly above its definition, enclosed in triple double quotes.\n                - The docstring should provide a brief description of the structures purpose and content.\n                - Append within the same docstring an array named searchterms_$_ with 3-5 unique keywords that describe the nature and role of the data structure.\n\n                **Additional Requirements:**\n                - Use triple double quotes exclusively for all docstrings.\n                - Do not include any commentary or explanations outside of the documented code.\n                - The final output must consist solely of the transformed code, wrapped between these markers:\n                {DOC_BEGIN_MARKER}\n                <documented code>\n                {DOC_END_MARKER}\n\n                Follow these instructions strictly and output only the documented code. Do not add any extra text.\n                \"\"\",\n                #capQuery is for internal processing\n                \"ragQuery\": \"\"\"\n                   You are an automated filter for code search results.\n                    Input: A natural language query and a list of search result objects.\n                    Task:\n                    1. Evaluate each search result for its relevance to the query.\n                    2. Return only those result objects that are directly relevant.\n                    3. Do not include any commentary, explanations, or extra text.\n                    Output: A JSON array of the relevant result objects.\n                \"\"\",\n                \"intQuery\": \"\"\"\n                    You are an AI search system for a code library. Your task is to process natural language queries and execute the following functions:\n\n                1. **Overview:** Generate an overview of the code library.\n                - Command: `{EXE_MARKER} get_overview() {EXE_MARKER_END}`\n\n                2. **Search Functions/Components:** Identify functions or components that meet specified conditions. \n                - Pre-requisite: Use Function 1 to generate an overview and chose files are likely to contain relevant functions search up to three files.\n                - Command: `{EXE_MARKER}func_list(filepath){EXE_MARKER_END}`\n\n                3. **Retrieve Code/Documentation:** Provide code or documentation for a specified component on demand.\n                - Description: `{EXE_MARKER}get_func_desc(function_name){EXE_MARKER_END}`\n                - Code: `{EXE_MARKER}get_func_code(function_name){EXE_MARKER_END}`\n\n                Wrap your final response between `{response_marker}` and `{response_marker_end}`. If none are found, return: \"No relevant components in the code base.\"\n                \"\"\",\n                \"codeAndQueryv0\":f\"\"\"\n                    You are an expert autonomous coding assitant. When given an instruction, first provide a clear, detailed,\n                    step-by-step plan outlining your approach, including any assumptions or clarifying questions you may have. \n                    You have the following capabilities for autonomous development:\n                    1.  By wrapping python code between {EXE_MARKER} and {EXE_MARKER_END} you can execute it to test implementations. The code enclosed \n                        within these markers will be executed after your response, and the output will be provided as the next prompts input.\n                    2. You have access to a code library that contains functions that will allow you to interact with your environment and develop more efficiently.\n                    You can query the library by wrapping question in between the markers {QUERY_MARKER} and {QUERY_MARKER_END}. If you want to make multiple querys separate them with {QUERY_MARKER_SPLIT}.\n                    for Example: {QUERY_MARKER} How do i save files {QUERY_MARKER_SPLIT} How do i create an ai Agent {QUERY_MARKER_END}\n\n                \"\"\",\n                \"codeAndQueryv1\":f\"\"\"\n                    You are an expert autonomous coding assistant. Your task is to help users by not only providing code but by clearly explaining your approach. Follow these steps for every instruction:\n\n                    Plan & Clarify:\n\n                    Begin by outlining a clear, detailed, step-by-step plan describing your approach.\n                    Include any assumptions you are making and ask clarifying questions if needed before proceeding.\n                    Code Execution:\n\n                    When ready to implement, wrap your Python code between the markers {EXE_MARKER} and {EXE_MARKER_END}.\n                    The code inside these markers will be executed automatically, and the output will be provided as input in the next prompt.\n                    Library Interactions:\n\n                    You have access to a code library with functions to interact with your environment.\n                    Always use components from the code library to fulfill a task and relevant components exist.\n                    \n                    To query the library, wrap your questions between {QUERY_MARKER} and {QUERY_MARKER_END}.\n                    If you need to ask multiple questions in one go, separate them using {QUERY_MARKER_SPLIT}.\n                    Example for Library Queries:\n\n                    {QUERY_MARKER} How do I save files? {QUERY_MARKER_SPLIT} How do I create an AI agent? {QUERY_MARKER_END}\n                    You can a request an quick overview of the code library if you need one.\n                    \n                    By following this structure, you ensure that your responses are systematic, transparent, and effective for autonomous development.\n\n                    \"\"\"\n\n\n}"
+            },
+            "PRESETS": {
+                "comp_head": "",
+                "comment": "A dictionary containing parameter sets for AI models, including system content, temperature, and max tokens.\n\nEach key represents a different persona or preset configuration.",
+                "code": "{\n\n    \"coder\": {\n        \"system_content\":  PERSONAS[\"coder\"],\n        \"temperature\": 0.2,\n        \"max_tokens\": 200\n    },\n    \"assistant\": {\n        \"system_content\": PERSONAS[\"assistant\"],\n        \"temperature\": 0.7,\n        \"max_tokens\": 150\n    },\n    \"default\": {\n        \"system_content\": PERSONAS[\"assistant\"],\n        \"temperature\": 0.7,\n        \"max_tokens\": 150\n    },\n    \"exe_Coder\": {\n        \"system_content\": PERSONAS[\"exe_Coder\"],\n        \"temperature\": 0.45,\n        \"max_tokens\": 5000\n    },\n    \"documenter\" : {\n        \"system_content\": PERSONAS[\"documenter\"],\n        \"temperature\": 0.4,\n        \"max_tokens\": 5000\n    },\n    \"documenterRAG\" : {\n        \"system_content\": PERSONAS[\"documenterRAG\"],\n        \"temperature\": 0.4,\n        \"max_tokens\": 5000\n    },\n    \"capQuery\": {\n        \"system_content\": PERSONAS[\"capQuery\"],\n        \"temperature\": 0.3,\n        \"max_tokens\": 2000\n\n    },\n    \"codeAndQuery\": {\n        \"system_content\": PERSONAS[\"codeAndQueryv1\"],\n        \"temperature\": 0.6,\n        \"max_tokens\": 5000\n    },\n}"
+            }
+        }
+    },
+    "rag.py": {
+        "path": "capabilities\\rag.py",
+        "components": {
+            "RAGFramework:": {
+                "comp_head": "class RAGFramework:",
+                "comment": "A framework for building and managing retrieval-augmented generation (RAG) systems.\n\nThis class is responsible for loading Python files, parsing their components, \nbuilding BM25 and FAISS indices for efficient retrieval, and providing \nmethods for hybrid search queries.\n\nsearchterms_1 = [\"RAG\", \"retrieval\", \"BM25\", \"FAISS\", \"indexing\"]",
+                "code": "class RAGFramework:\nA framework for building and managing retrieval-augmented generation (RAG) systems.\n\nThis class is responsible for loading Python files, parsing their components, \nbuilding BM25 and FAISS indices for efficient retrieval, and providing \nmethods for hybrid search queries.\n\nsearchterms_1 = [\"RAG\", \"retrieval\", \"BM25\", \"FAISS\", \"indexing\"]",
+                "methods": {
+                    "__init__": {
+                        "comp_head": "def __init__(self):",
+                        "comment": "Initialize the RAG framework with necessary data structures.",
+                        "code": "def __init__(self):\nInitialize the RAG framework with necessary data structures."
+                    },
+                    "log_error": {
+                        "comp_head": "def log_error(self, message):",
+                        "comment": "Append error messages to the log file.",
+                        "code": "def log_error(self, message):\nAppend error messages to the log file."
+                    },
+                    "parse_file": {
+                        "comp_head": "def parse_file(self, filepath):",
+                        "comment": "Parse a file using the ast module (for functions and classes)\nand regex (for arrays and dictionaries).\n\nReturns a dict with keys: \"functions\", \"classes\", \"arrays\", \"dictionaries\".\n\nParameters:\n    filepath (str): The path to the Python file to be parsed.\n\nReturns:\n    dict: A dictionary containing parsed components of the file.\n\nsearchterms_2 = [\"parse\", \"file\", \"AST\", \"regex\", \"components\"]",
+                        "code": "def parse_file(self, filepath):\nParse a file using the ast module (for functions and classes)\nand regex (for arrays and dictionaries).\n\nReturns a dict with keys: \"functions\", \"classes\", \"arrays\", \"dictionaries\".\n\nParameters:\n    filepath (str): The path to the Python file to be parsed.\n\nReturns:\n    dict: A dictionary containing parsed components of the file.\n\nsearchterms_2 = [\"parse\", \"file\", \"AST\", \"regex\", \"components\"]"
+                    },
+                    "load_data": {
+                        "comp_head": "def load_data(self, directory):",
+                        "comment": "Load and parse all Python files in the given directory.\n\nParameters:\n    directory (str): The path to the directory containing Python files.\n\nsearchterms_3 = [\"load\", \"data\", \"directory\", \"Python\", \"files\"]",
+                        "code": "def load_data(self, directory):\nLoad and parse all Python files in the given directory.\n\nParameters:\n    directory (str): The path to the directory containing Python files.\n\nsearchterms_3 = [\"load\", \"data\", \"directory\", \"Python\", \"files\"]"
+                    },
+                    "build_entries": {
+                        "comp_head": "def build_entries(self):",
+                        "comment": "Build a list of entries from the parsed data.\n\nEach entry is a dictionary with keys:\n  - file, type, head, doc, and optionally parent information for methods.\nAlso build a corpus list (text for each entry) used for indexing.\n\nsearchterms_4 = [\"build\", \"entries\", \"parsed\", \"data\", \"corpus\"]",
+                        "code": "def build_entries(self):\nBuild a list of entries from the parsed data.\n\nEach entry is a dictionary with keys:\n  - file, type, head, doc, and optionally parent information for methods.\nAlso build a corpus list (text for each entry) used for indexing.\n\nsearchterms_4 = [\"build\", \"entries\", \"parsed\", \"data\", \"corpus\"]"
+                    },
+                    "build_bm25_index": {
+                        "comp_head": "def build_bm25_index(self):",
+                        "comment": "Build BM25 model over the corpus (each entry's text).\n\nsearchterms_5 = [\"build\", \"BM25\", \"model\", \"corpus\", \"index\"]",
+                        "code": "def build_bm25_index(self):\nBuild BM25 model over the corpus (each entry's text).\n\nsearchterms_5 = [\"build\", \"BM25\", \"model\", \"corpus\", \"index\"]"
+                    },
+                    "build_faiss_index": {
+                        "comp_head": "def build_faiss_index(self):",
+                        "comment": "Build FAISS index over the corpus using TF-IDF vectors.\n\nsearchterms_6 = [\"build\", \"FAISS\", \"index\", \"TF-IDF\", \"vectors\"]",
+                        "code": "def build_faiss_index(self):\nBuild FAISS index over the corpus using TF-IDF vectors.\n\nsearchterms_6 = [\"build\", \"FAISS\", \"index\", \"TF-IDF\", \"vectors\"]"
+                    },
+                    "save_bm25": {
+                        "comp_head": "def save_bm25(self, filepath):",
+                        "comment": "Save the BM25 model and the entries mapping.\n\nParameters:\n    filepath (str): The path to the file where the BM25 model will be saved.\n\nsearchterms_7 = [\"save\", \"BM25\", \"model\", \"filepath\", \"entries\"]",
+                        "code": "def save_bm25(self, filepath):\nSave the BM25 model and the entries mapping.\n\nParameters:\n    filepath (str): The path to the file where the BM25 model will be saved.\n\nsearchterms_7 = [\"save\", \"BM25\", \"model\", \"filepath\", \"entries\"]"
+                    },
+                    "save_faiss": {
+                        "comp_head": "def save_faiss(self, filepath):",
+                        "comment": "Save the FAISS index, vectorizer, and the entries mapping.\n\nParameters:\n    filepath (str): The path to the file where the FAISS index will be saved.\n\nsearchterms_8 = [\"save\", \"FAISS\", \"index\", \"vectorizer\", \"filepath\"]",
+                        "code": "def save_faiss(self, filepath):\nSave the FAISS index, vectorizer, and the entries mapping.\n\nParameters:\n    filepath (str): The path to the file where the FAISS index will be saved.\n\nsearchterms_8 = [\"save\", \"FAISS\", \"index\", \"vectorizer\", \"filepath\"]"
+                    },
+                    "build_and_save_indices": {
+                        "comp_head": "def build_and_save_indices(self, directory, bm25_filepath, faiss_filepath):",
+                        "comment": "Execute the entire process:\n  1. Load and parse files from the directory.\n  2. Build entries and corpus from parsed components.\n  3. Build BM25 and FAISS indices.\n  4. Save the models to specified file paths.\n\nParameters:\n    directory (str): The path to the directory containing Python files.\n    bm25_filepath (str): The path to save the BM25 model.\n    faiss_filepath (str): The path to save the FAISS index.\n\nsearchterms_9 = [\"build\", \"save\", \"indices\", \"directory\", \"filepaths\"]",
+                        "code": "def build_and_save_indices(self, directory, bm25_filepath, faiss_filepath):\nExecute the entire process:\n  1. Load and parse files from the directory.\n  2. Build entries and corpus from parsed components.\n  3. Build BM25 and FAISS indices.\n  4. Save the models to specified file paths.\n\nParameters:\n    directory (str): The path to the directory containing Python files.\n    bm25_filepath (str): The path to save the BM25 model.\n    faiss_filepath (str): The path to save the FAISS index.\n\nsearchterms_9 = [\"build\", \"save\", \"indices\", \"directory\", \"filepaths\"]"
+                    },
+                    "retrieve": {
+                        "comp_head": "def retrieve(self, queries, topk=1):",
+                        "comment": "Hybrid retrieval system for structured (exact) and semantic (natural language) search.\n\nParameters:\n    queries (list): A list of search queries (strings).\n    topk (int): The number of top results to return (default is 1).\n\nReturns:\n    list: A list of retrieved entries based on the search queries.\n\nsearchterms_10 = [\"retrieve\", \"queries\", \"search\", \"results\", \"hybrid\"]",
+                        "code": "def retrieve(self, queries, topk=1):\nHybrid retrieval system for structured (exact) and semantic (natural language) search.\n\nParameters:\n    queries (list): A list of search queries (strings).\n    topk (int): The number of top results to return (default is 1).\n\nReturns:\n    list: A list of retrieved entries based on the search queries.\n\nsearchterms_10 = [\"retrieve\", \"queries\", \"search\", \"results\", \"hybrid\"]"
+                    }
+                }
+            }
+        }
+    },
+    "__init__.py": {
+        "path": "capabilities\\__init__.py",
+        "components": {}
+    }
+}

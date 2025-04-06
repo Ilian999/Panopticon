@@ -5,7 +5,7 @@ import io
 import contextlib
 import importlib.util
 
-from capabilities.constants import CAPABILITIES
+from capabilities.utilities.constants import CAPABILITIES
 from . import * 
 from capabilities.CapRetrieval import search_code
 from capabilities.Agent import CreateAgent
@@ -223,7 +223,7 @@ def process_coding_response(current_chat, assistant_reply):
 
     return assistant_reply
 
-def process_query_response(current_chat, query_agent, assistant_reply, debug=True):
+def process_query_response(current_chat, assistant_reply, debug=True, query_type="v1"):
     """
     Processes the assistant's response in a query session, executing searches and forwarding results.
 
@@ -241,20 +241,25 @@ def process_query_response(current_chat, query_agent, assistant_reply, debug=Tru
         queries = query_block.split("(-div-)")
 
         results = []
-        for query in queries:
-            if "<capabilities_summary>" in query:
-                results.append(CAPABILITIES)
-            search_results = search_code(query.strip(), top_k=3)
-            results.append(search_results)
+        if query_type == "v0":
+            query_agent = CreateAgent(preset="ragQuery")
+            for query in queries:
+                
+                search_results = search_code(query.strip(), top_k=3)
+                results.append(search_results)
+            
+            formatted_results = "\n".join(str(result) for result in results)
+            queryAgent_reply = query_agent.send_message(f"Search results: {formatted_results}")
 
-        formatted_results = "\n".join(str(result) for result in results)
-        queryAgent_reply = query_agent.send_message(f"Search results: {formatted_results}")
+            if debug:
+                print("Query Agent Reply:", queryAgent_reply)
 
-        if debug:
-            print("Query Agent Reply:", queryAgent_reply)
-
-        assistant_reply = current_chat.send_message(f"Query result: {queryAgent_reply}")
-        print("Assistant:", assistant_reply)
+            assistant_reply = current_chat.send_message(f"Query result: {queryAgent_reply}")
+            print("Assistant:", assistant_reply)
+        if query_type == "v1":
+            query_agent = CreateAgent(preset="intQuery")
+            for query in queries:
+                results.append()
 
     return assistant_reply
 
@@ -307,8 +312,8 @@ def code_and_query_chat(preset_agent=None):
     None
     """
     current_chat = preset_agent if preset_agent else select_chat(query_chat=True)
-    query_agent = CreateAgent(preset="capQuery")
-    chat_loop(current_chat, [lambda chat, reply: process_query_response(chat, query_agent, reply), process_coding_response])
+    
+    chat_loop(current_chat, [lambda chat, reply: process_query_response(chat, reply), process_coding_response])
 
 def simple_chat(preset_agent=None):
     """

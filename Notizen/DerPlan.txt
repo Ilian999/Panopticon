@@ -1,3 +1,14 @@
+--markers for return
+--loop for the intquery bot 
+--equivalent to gen embeddings
+--functions  
+    get_overview()
+    func_list(filepath) good
+    get_comp_desc(function_name) good
+    get_comp_code(function_name) -- anstatt vom code steht hier head + comment change that - dafür muss u.a die parse file function agepasst werden
+
+get_overview() hab ich das nicht schon irgendwo?
+layered structure zu utilites verschieben
 
 desing an alternative capabilites query that has access to a quick summary of all files, then searches the files for function names then for function desriptions and the returns the correct one.
 

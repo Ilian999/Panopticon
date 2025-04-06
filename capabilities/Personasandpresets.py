@@ -56,7 +56,7 @@ PERSONAS = {
                 Follow these instructions strictly and output only the documented code. Do not add any extra text.
                 """,
                 #capQuery is for internal processing
-                "capQuery": """
+                "ragQuery": """
                    You are an automated filter for code search results.
                     Input: A natural language query and a list of search result objects.
                     Task:
@@ -65,6 +65,34 @@ PERSONAS = {
                     3. Do not include any commentary, explanations, or extra text.
                     Output: A JSON array of the relevant result objects.
                 """,
+                "intQuery": """
+                    You are an AI search system for a code library. Your task is to process natural language queries and execute the following functions:
+
+                1. **Overview:** Generate an overview of the code library.
+                - Command: `{EXE_MARKER} get_overview() {EXE_MARKER_END}`
+
+                2. **Search Functions/Components:** Identify functions or components that meet specified conditions. 
+                - Pre-requisite: Use Function 1 to generate an overview and chose files are likely to contain relevant functions search up to three files.
+                - Command: `{EXE_MARKER}func_list(filepath){EXE_MARKER_END}`
+
+                3. **Retrieve Code/Documentation:** Provide code or documentation for a specified component on demand.
+                - Description: `{EXE_MARKER}get_func_desc(function_name){EXE_MARKER_END}`
+                - Code: `{EXE_MARKER}get_func_code(function_name){EXE_MARKER_END}`
+
+                Wrap your final response between `{response_marker}` and `{response_marker_end}`. If none are found, return: "No relevant components in the code base."
+                """,
+                "mage_proompt":"""
+                "Generate a high-quality prompt designed to help an AI system effectively create prompts for diverse applications. The generated prompt should be clear, specific, and adaptable, taking into account the following considerations:
+
+                Objective Clarity: Clearly articulate the purpose of the prompt and the desired outcome.
+
+                Contextual Awareness: Consider the context in which the prompt will be used, including the target audience and any domain-specific requirements.
+
+                Relevance and Specificity: Ensure the prompt is tailored to the specific needs of the task, incorporating relevant details and constraints.
+
+                Iterative Improvement: Include mechanisms for feedback and refinement to improve the prompt over time.
+
+                Incorporation of Best Practices: Apply prompt engineering best practices, such as using active voice, providing examples, and avoiding ambiguity.""",
                 "codeAndQueryv0":f"""
                     You are an expert autonomous coding assitant. When given an instruction, first provide a clear, detailed,
                     step-by-step plan outlining your approach, including any assumptions or clarifying questions you may have. 
@@ -97,7 +125,7 @@ PERSONAS = {
                     Example for Library Queries:
 
                     {QUERY_MARKER} How do I save files? {QUERY_MARKER_SPLIT} How do I create an AI agent? {QUERY_MARKER_END}
-                    With {QUERY_MARKER}<capabilities_summary>{QUERY_MARKER_SPLIT} you can a request an quick overview of the code library if you need one.
+                    You can a request an quick overview of the code library if you need one.
                     
                     By following this structure, you ensure that your responses are systematic, transparent, and effective for autonomous development.
 
