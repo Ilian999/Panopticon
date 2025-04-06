@@ -74,31 +74,21 @@ def create_file_with_format(filename, file_format):
     except Exception as e:
         return f"An error occurred while creating the file: {e}"
 
-def call_function(script_name, function_name):
-    """
-    Dynamically imports the specified script and calls the specified function.
-    
-    :param script_name: The name of the script to import (without .py extension) (str)
-    :param function_name: The name of the function to call (str)
-    :return: None
-    :raises ImportError: If the script cannot be found.
-    :raises AttributeError: If the function does not exist in the script.
-    :raises Exception: If an error occurs while calling the function.
-    
-    searchterms_04 = ["call", "function", "import", "dynamic", "script"]
-    """
+def get_file_structure(directory_path='capabilities'):
+    file_structure = []
+
     try:
-        # Import the specified script dynamically
-        module = __import__(script_name)
-        
-        # Get the specified function from the module
-        func = getattr(module, function_name)
-        
-        # Call the specified function
-        func()
-    except ImportError:
-        print(f"Error: The script '{{script_name}}.py' could not be found.")
-    except AttributeError:
-        print(f"Error: The function '{{function_name}}' does not exist in '{{script_name}}.py'.")
-    except Exception as e:
-        print(f"An error occurred while calling the function: {{e}}")
+        for root, dirs, files in os.walk(directory_path):
+            # Exclude __pycache__ from the directories to traverse
+            dirs[:] = [d for d in dirs if d != '__pycache__']
+            
+            for name in dirs:
+                file_structure.append(os.path.join(root, name))
+            for name in files:
+                file_structure.append(os.path.join(root, name))
+
+    except FileNotFoundError:
+        return f"Error: The directory '{directory_path}' does not exist."
+    
+    return file_structure
+
